@@ -1,3 +1,3 @@
-import {pseudoLocalization} from './pseudo-localization.js';
+import { start } from "./pseudo-localization.js";
 
-pseudoLocalization();
+start();
