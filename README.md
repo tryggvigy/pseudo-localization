@@ -1,3 +1,5 @@
+<sub>Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe</sub>
+
 # pseudo-localization
 
 | English  | Pseudo Language |
@@ -6,7 +8,7 @@
 
 ---
 
-Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe. `pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM. 
+`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM. 
 
 [Demo here](https://tryggvigy.github.io/pseudo-localization/hamlet.html). Changing text nodes and adding or removing trees of elements will trigger a pseudolocalization run on all the new text added to the DOM. Try it using the devtools.
 
