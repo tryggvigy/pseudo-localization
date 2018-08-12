@@ -74,3 +74,6 @@ Below you can see vertical cutoff, caught by psuedolocalization in action.
 | English  | Pseudo Language |
 | ------------- | ------------- |
 | <img width="559" alt="screen shot 2018-08-12 at 1 23 18 pm" src="https://user-images.githubusercontent.com/2373958/44001651-21f32b42-9e36-11e8-80eb-5b88e8fd9b13.png"> | <img width="661" alt="after" src="https://user-images.githubusercontent.com/2373958/44001656-2fba7780-9e36-11e8-8924-69c849a3b48c.png"> |
+
+## Support
+Works in all evergreen browsers.
