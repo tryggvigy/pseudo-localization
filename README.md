@@ -5,14 +5,19 @@ Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12ff
 `pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM.
 
 ## Installation
+
+### Through npm
 ```
 npm install pseudo-localization
 ```
 
+### Raw script (without npm)
+Copy paste the script in it's entirty from [here](https://github.com/tryggvigy/pseudo-localization/blob/master/hamlet.html#L8873-L9029) and use as you wish.
+
+
 ## Usage
 
-### import/require/ through npm
-**Note** the npm package expects to be used through a bundler.
+### import or require the npm module
 
 `pseudo-localization` is just a script and can be invoked like so:
 
@@ -41,7 +46,7 @@ class PseudoLocalization extends React.Component {
   }
 }
 
-// And use it somewhere ... 
+// And use it
 
 class Page extends React.Component {
   render() {
@@ -54,9 +59,6 @@ class Page extends React.Component {
   }
 }
 ```
-
-### Raw script
-Copy paste the script in it's entirty from [here](https://github.com/tryggvigy/pseudo-localization/blob/master/hamlet.html#L8873-L9029) and use as you wish.
 
 ## Why?
 To catch localization problems like:
