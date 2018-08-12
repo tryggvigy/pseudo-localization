@@ -70,8 +70,8 @@ const pseudoLocalization = (() => {
       element,
       NodeFilter.SHOW_TEXT,
       node => {
-        const isAllWs = !/[^\t\n\r ]/.test(node.nodeValue);
-        // A comment node or a text node, all ws
+        const isAllWs = !/[^\s]/.test(node.nodeValue);
+        // A comment node or a text node, all whitespace
         const isIgnorable =
           node.nodeType == 8 || (node.nodeType == 3 && isAllWs);
         if (isIgnorable) return NodeFilter.FILTER_REJECT;

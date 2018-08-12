@@ -11,7 +11,8 @@
     The Tragedy of Hamlet, Prince of Denmark.
     http://shakespeare.mit.edu/hamlet/full.html
   -->
-  <H3>ACT I</h3>
+    <H3>ACT I</h3>
+      &nbsp;
     <h3>SCENE I. Elsinore. A platform before the castle.</h3>
     <p><blockquote>
     <i>FRANCISCO at his post. Enter to him BERNARDO</i>
@@ -8942,7 +8943,7 @@ const pseudoLocalization = (() => {
       element,
       NodeFilter.SHOW_TEXT,
       node => {
-        const isAllWs = !/[^\t\n\r ]/.test(node.nodeValue);
+        const isAllWs = !/[^\s]/.test(node.nodeValue);
         // A comment node or a text node, all ws
         const isIgnorable =
           node.nodeType == 8 || (node.nodeType == 3 && isAllWs);
