@@ -1,10 +1,14 @@
 # pseudo-localization
 
-Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe
+| English  | Pseudo Language |
+| ------------- | ------------- |
+| <img width="559" alt="screen shot 2018-08-12 at 1 23 18 pm" src="https://user-images.githubusercontent.com/2373958/44001651-21f32b42-9e36-11e8-80eb-5b88e8fd9b13.png"> | <img width="661" alt="after" src="https://user-images.githubusercontent.com/2373958/44001656-2fba7780-9e36-11e8-8924-69c849a3b48c.png"> |
 
-`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM. 
+---
 
-[Demo here](https://tryggvigy.github.io/pseudo-localization/hamlet.html). Changing text in text nodes, adding or removing trees of elements will all trigger a pseudolocalization run on all the new text added to the dom. You can try it using the devtools.
+Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe. `pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM. 
+
+[Demo here](https://tryggvigy.github.io/pseudo-localization/hamlet.html). Changing text nodes and adding or removing trees of elements will trigger a pseudolocalization run on all the new text added to the DOM. Try it using the devtools.
 
 ## Installation
 
@@ -69,11 +73,6 @@ To catch localization problems like:
 - Languages for which the reading order is not left-to-right, which is especially problematic for user input.
 - Application code that assumes all characters fit into a limited character set, such as ASCII or ANSI, which can produce actual logic bugs if left uncaught.
 
-Below you can see vertical cutoff, caught by psuedolocalization in action.
-
-| English  | Pseudo Language |
-| ------------- | ------------- |
-| <img width="559" alt="screen shot 2018-08-12 at 1 23 18 pm" src="https://user-images.githubusercontent.com/2373958/44001651-21f32b42-9e36-11e8-80eb-5b88e8fd9b13.png"> | <img width="661" alt="after" src="https://user-images.githubusercontent.com/2373958/44001656-2fba7780-9e36-11e8-8924-69c849a3b48c.png"> |
 
 ## Support
 Works in all evergreen browsers.
