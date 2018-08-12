@@ -7,12 +7,20 @@
   <title>Document</title>
 </head>
 <body>
-  <!--
-    The Tragedy of Hamlet, Prince of Denmark.
-    http://shakespeare.mit.edu/hamlet/full.html
-  -->
+    <h1>Custom Testing Section</h1>
+    <!-- Comments should be left alone -->
+    <!-- &nbsp; should be ignored -->
+    &nbsp;
+    <!-- Whitespace shouldn't count towards added explosion symbol count -->
+    <span>
+      
+        hey   
+      
+    </span>
+
+    <h1>The Tragedy of Hamlet, Prince of Denmark.</h1>
+    <a href="http://shakespeare.mit.edu/hamlet/full.html">http://shakespeare.mit.edu/hamlet/full.html</a>
     <H3>ACT I</h3>
-      &nbsp;
     <h3>SCENE I. Elsinore. A platform before the castle.</h3>
     <p><blockquote>
     <i>FRANCISCO at his post. Enter to him BERNARDO</i>
@@ -8937,37 +8945,36 @@ const pseudoLocalization = (() => {
   ];
 
   const textNodesUnder = element => {
-    let n;
-    const a = [];
-    const walk = document.createTreeWalker(
+    const walker = document.createTreeWalker(
       element,
       NodeFilter.SHOW_TEXT,
       node => {
-        const isAllWs = !/[^\s]/.test(node.nodeValue);
-        // A comment node or a text node, all ws
-        const isIgnorable =
-          node.nodeType == 8 || (node.nodeType == 3 && isAllWs);
-        if (isIgnorable) return NodeFilter.FILTER_REJECT;
+        const isAllWhitespace = !/[^\s]/.test(node.nodeValue);
+        if (isAllWhitespace) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       }
     );
-    while ((n = walk.nextNode())) a.push(n);
-    return a;
+
+    let currNode;
+    const textNodes = [];
+    while ((currNode = walker.nextNode())) textNodes.push(currNode);
+    return textNodes;
   };
 
   const psuedoLocalizeString = string => {
     let pseudoLocalizedText = "";
-    for (let c of string) {
-      if (map[c]) {
+    for (let character of string) {
+      if (map[character]) {
         pseudoLocalizedText +=
-          map[c][Math.floor(Math.random() * map[c].length)];
-      } else pseudoLocalizedText += c;
+          map[character][Math.floor(Math.random() * map[character].length)];
+      } else pseudoLocalizedText += character;
     }
 
     const explodeRatio = 1.4;
-    const explodedTextLength = Math.ceil(string.length * explodeRatio);
+    // Trim strings to prevent whitespace from increasing the explosion amount
+    const explodedTextLength = Math.ceil(string.trim().length * explodeRatio);
     let i = 0;
-    while (pseudoLocalizedText.length < explodedTextLength) {
+    while (pseudoLocalizedText.trim().length < explodedTextLength) {
       pseudoLocalizedText += " " + explosionSymbols[i++];
     }
 
@@ -8982,7 +8989,6 @@ const pseudoLocalization = (() => {
   };
 
   const domMutationCallback = mutationsList => {
-    console.log(mutationsList);
     for (var mutation of mutationsList) {
       if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
         // Turn the observer off while performing dom manipulation to prevent
@@ -9004,7 +9010,7 @@ const pseudoLocalization = (() => {
         observer.observe(document.body, observerConfig);
       }
     }
-  }
+  };
 
   // Observe dom update and pseudo localize changed nodes.
   const observer = new MutationObserver(domMutationCallback);

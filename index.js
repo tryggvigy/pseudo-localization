@@ -64,37 +64,36 @@ const pseudoLocalization = (() => {
   ];
 
   const textNodesUnder = element => {
-    let n;
-    const a = [];
-    const walk = document.createTreeWalker(
+    const walker = document.createTreeWalker(
       element,
       NodeFilter.SHOW_TEXT,
       node => {
-        const isAllWs = !/[^\s]/.test(node.nodeValue);
-        // A comment node or a text node, all whitespace
-        const isIgnorable =
-          node.nodeType == 8 || (node.nodeType == 3 && isAllWs);
-        if (isIgnorable) return NodeFilter.FILTER_REJECT;
+        const isAllWhitespace = !/[^\s]/.test(node.nodeValue);
+        if (isAllWhitespace) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       }
     );
-    while ((n = walk.nextNode())) a.push(n);
-    return a;
+
+    let currNode;
+    const textNodes = [];
+    while ((currNode = walker.nextNode())) textNodes.push(currNode);
+    return textNodes;
   };
 
   const psuedoLocalizeString = string => {
     let pseudoLocalizedText = "";
-    for (let c of string) {
-      if (map[c]) {
+    for (let character of string) {
+      if (map[character]) {
         pseudoLocalizedText +=
-          map[c][Math.floor(Math.random() * map[c].length)];
-      } else pseudoLocalizedText += c;
+          map[character][Math.floor(Math.random() * map[character].length)];
+      } else pseudoLocalizedText += character;
     }
 
     const explodeRatio = 1.4;
-    const explodedTextLength = Math.ceil(string.length * explodeRatio);
+    // Trim strings to prevent whitespace from increasing the explosion amount
+    const explodedTextLength = Math.ceil(string.trim().length * explodeRatio);
     let i = 0;
-    while (pseudoLocalizedText.length < explodedTextLength) {
+    while (pseudoLocalizedText.trim().length < explodedTextLength) {
       pseudoLocalizedText += " " + explosionSymbols[i++];
     }
 
@@ -109,7 +108,6 @@ const pseudoLocalization = (() => {
   };
 
   const domMutationCallback = mutationsList => {
-    console.log(mutationsList);
     for (var mutation of mutationsList) {
       if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
         // Turn the observer off while performing dom manipulation to prevent
@@ -131,7 +129,7 @@ const pseudoLocalization = (() => {
         observer.observe(document.body, observerConfig);
       }
     }
-  }
+  };
 
   // Observe dom update and pseudo localize changed nodes.
   const observer = new MutationObserver(domMutationCallback);
