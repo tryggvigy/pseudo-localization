@@ -1,11 +1,25 @@
 {
   "name": "pseudo-localization",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.8.0",
+  "description": "Dynamic pseudo-localization in the browser",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Tryggvi Gylfason (http://twitter.com/tryggvigy)",
+  "keywords": [
+    "internationalization",
+    "localization",
+    "l10n",
+    "i18n",
+    "psuedo",
+    "language",
+    "translation",
+    "psuedo-localize"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tryggvigy/pseudo-localization.git"
+  },
   "license": "ISC"
 }
