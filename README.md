@@ -2,7 +2,7 @@
 
 Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe
 
-`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM.
+`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) agains the DOM. [Demo here.](https://tryggvigy.github.io/pseudo-localization/hamlet.html)
 
 ## Installation
 
