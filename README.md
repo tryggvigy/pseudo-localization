@@ -61,7 +61,7 @@ class Page extends React.Component {
     return (
       <main>
        <PseudoLocalization />
-       <h1>I will get pseudo localizad along with everything else under document.body!</h1>
+       <h1>I will get pseudo localized along with everything else under document.body!</h1>
       <main>
     );
   }
