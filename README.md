@@ -1,4 +1,4 @@
-<sub>Inspired by https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe</sub>
+<sub>Inspired by pseudo-localization at [Netflix](https://medium.com/netflix-techblog/pseudo-localization-netflix-12fff76fbcbe) and [Firefox](https://reviewboard.mozilla.org/r/248606/diff/2#index_header)</sub>
 
 # pseudo-localization
 
@@ -23,7 +23,7 @@ npm install pseudo-localization
 Copy paste the script in it's entirty from [here](https://github.com/tryggvigy/pseudo-localization/blob/master/hamlet.html#L8873-L9029) and use as you wish.
 
 
-## Usage
+# Usage
 
 ### import or require the npm module
 
@@ -67,6 +67,38 @@ class Page extends React.Component {
   }
 }
 ```
+
+## Strategies
+`pseudo-localization` supports two strategies:
+
+1. accented
+2. bidi
+
+### accented - Ȧȧƈƈḗḗƞŧḗḗḓ Ḗḗƞɠŀīīşħ
+
+Usage: `pseudoLocalization.start({ strategy: 'accented' });` or simply `pseudoLocalization.start();`.
+
+In Accented English all Latin letters are replaced by accented
+Unicode counterparts which don't impair the readability of the content.
+This allows developers to quickly test if any given string is being
+correctly displayed in its 'translated' form.  Additionally, simple
+heuristics are used to make certain words longer to better simulate the
+experience of international users.
+
+<img width="622" alt="screen shot 2018-08-19 at 18 48 29" src="https://user-images.githubusercontent.com/2373958/44311259-62303e80-a3e4-11e8-884a-54c77416b922.png">
+
+
+### bidi - ɥsıʅƃuƎ ıpıԐ
+
+Usage: `pseudoLocalization.start({ strategy: 'bidi' });`.
+
+Bidi English is a fake RTL locale.  All words are surrounded by
+Unicode formatting marks forcing the RTL directionality of characters.
+In addition, to make the reversed text easier to read, individual
+letters are flipped.
+
+<img width="602" alt="screen shot 2018-08-19 at 18 45 49" src="https://user-images.githubusercontent.com/2373958/44311263-770cd200-a3e4-11e8-97e4-9a1896bd5975.png">
+
 
 ## Why?
 To catch localization problems like:
