@@ -1,3 +1,6 @@
+## 1.1.4
+- Update explanatory picture in README.md
+
 ## 1.1.3
 - Add support for bidirectional text
   - `pseudoLocalization.start({ strategy: 'bidi' });`
