@@ -30,7 +30,7 @@ Copy paste the script in it's entirty from [here](https://github.com/tryggvigy/p
 `pseudo-localization` is just a script and can be invoked like so:
 
 ```js
-const pseudoLocalization = require('psuedo-localization'); 
+const pseudoLocalization = require('pseudo-localization'); 
 
 pseudoLocalization.start();
 
