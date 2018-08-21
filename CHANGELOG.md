@@ -1,3 +1,7 @@
+## 1.1.5
+- Fix typo in README
+- Set MIT as license in package.json
+
 ## 1.1.4
 - Update explanatory picture in README.md
 
