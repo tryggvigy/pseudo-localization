@@ -1,3 +1,6 @@
+## 1.2.0
+- Expose `localize` function
+
 ## 1.1.5
 - Fix typo in README
 - Set MIT as license in package.json
