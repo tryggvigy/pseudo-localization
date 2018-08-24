@@ -77,7 +77,7 @@ import { localize } from 'pseudo-localization';
 import localize from 'pseudo-localization/localize';
 
 console.log(localize('hello')); // --> ħḗḗŀŀǿǿ
-console.log(localize('hello', { strategy: 'bidi' })); // --> ɥǝʅʅo‬
+console.log(localize('hello', { strategy: 'bidi' })); // --> oʅʅǝɥ
 ```
 
 ## Strategies
