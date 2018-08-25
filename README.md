@@ -135,6 +135,8 @@ To catch localization problems like:
 - Languages for which the reading order is not left-to-right, which is especially problematic for user input.
 - Application code that assumes all characters fit into a limited character set, such as ASCII or ANSI, which can produce actual logic bugs if left uncaught.
 
+In addition, the pseudo-localization process may uncover places where an element should be localizable, but is hard coded in a source language.
+
 
 ## Support
 Works in all evergreen browsers.
