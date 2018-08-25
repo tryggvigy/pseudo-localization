@@ -68,6 +68,18 @@ class Page extends React.Component {
 }
 ```
 
+You can also call the underlying `localize` function to pseudo-localize any string.
+
+
+```js
+import { localize } from 'pseudo-localization';
+// OR
+import localize from 'pseudo-localization/localize';
+
+console.log(localize('hello')); // --> ħḗḗŀŀǿǿ
+console.log(localize('hello', { strategy: 'bidi' })); // --> oʅʅǝɥ
+```
+
 ## Strategies
 `pseudo-localization` supports two strategies:
 
