@@ -8,7 +8,7 @@
 
 ---
 
-`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) against the DOM. 
+`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) against the DOM.
 
 [Demo here](https://tryggvigy.github.io/pseudo-localization/hamlet.html). Changing text nodes and adding or removing trees of elements will trigger a pseudolocalization run on all the new text added to the DOM. Try it using the devtools.
 
@@ -79,6 +79,22 @@ import localize from 'pseudo-localization/localize';
 console.log(localize('hello')); // --> ħḗḗŀŀǿǿ
 console.log(localize('hello', { strategy: 'bidi' })); // --> oʅʅǝɥ
 ```
+
+A good use-case for `localize` is testing that strings are _actually_ being localized and not hard coded. 
+
+```js
+import { localize } from 'pseudo-localization';
+import translate from './my-translation-lib';
+
+// Pseudo localize every string returned from your normal translation function.
+const _ = key => localize(translate(key, navigator.language));
+
+_('Some Localized Text'); // Şǿǿḿḗḗ Ŀǿǿƈȧȧŀīẑḗḗḓ Ŧḗḗẋŧ
+// Or, in React for example
+const Header = () => <h1>{_('Localized Header Text')}</h1>;
+```
+
+Any strings that do not pass through the translation function will now stand out in the UI because the will not be pseudo-localized.
 
 ## Strategies
 `pseudo-localization` supports two strategies:
