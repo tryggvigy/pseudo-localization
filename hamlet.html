@@ -7,20 +7,31 @@
   <title>Document</title>
 </head>
 <body>
-    <h1>Custom Testing Section</h1>
-    <!-- Comments should be left alone -->
-    <!-- &nbsp; should be ignored -->
-    &nbsp;
-    <!-- Whitespace shouldn't count towards added explosion symbol count -->
-    <span>
-      
-        hey   
-      
-    </span>
-    <br/>
-    <bidi>Hello bidirectional text!</bidi>
+  <!-- ==== TEST SECTION BEGINS ==== -->
+  <h1>Testing Section</h1>
+  <!-- Comments should be left alone -->
+  <!-- &nbsp; should be ignored -->
+  &nbsp;
+  <!-- Whitespace shouldn't count towards added explosion symbol count -->
+  <span> hey </span> <br />
 
-    <hr/>
+  <bidi>Hello bidirectional text!</bidi> <br />
+
+  <!-- Elements who are blacklisted should be left alone. -->
+  <style>
+    .abcd {
+      color: rebeccapurple;
+    }
+  </style>
+  <div class="abcd">My style node was left alone so I'm purple.</div>
+  <svg height="30">
+    <text x="0" y="15" fill="red">svg text node left alone!</text>
+  </svg>
+  <br />
+
+  <!-- ==== TEST SECTION ENDS ==== -->
+  <hr />
+
 
     <h1>The Tragedy of Hamlet, Prince of Denmark.</h1>
     <a href="http://shakespeare.mit.edu/hamlet/full.html">http://shakespeare.mit.edu/hamlet/full.html</a>
@@ -8998,7 +9009,8 @@ const pseudoLocalization = (() => {
     prefix: "",
     postfix: "",
     map: ACCENTED_MAP,
-    elongate: true
+    elongate: true,
+    blacklistedNodeNames: ['STYLE']
   };
 
   const textNodesUnder = element => {
@@ -9008,6 +9020,10 @@ const pseudoLocalization = (() => {
       node => {
         const isAllWhitespace = !/[^\s]/.test(node.nodeValue);
         if (isAllWhitespace) return NodeFilter.FILTER_REJECT;
+
+        const isBlacklistedNode = opts.blacklistedNodeNames.includes(node.parentElement.nodeName);
+        if (isBlacklistedNode) return NodeFilter.FILTER_REJECT;
+
         return NodeFilter.FILTER_ACCEPT;
       }
     );
@@ -9082,7 +9098,10 @@ const pseudoLocalization = (() => {
     subtree: true
   };
 
-  const start = (options = { strategy: "accented" }) => {
+  const start = (options = {
+    strategy: "accented",
+    blacklistedNodeNames: opts.blacklistedNodeNames
+  }) => {
     if (options.strategy === "bidi") {
       // Surround words with Unicode formatting marks forcing
       // the RTL directionality of characters.
@@ -9091,6 +9110,7 @@ const pseudoLocalization = (() => {
       opts.map = BIDI_MAP;
       opts.elongate = false;
     }
+    opts.blacklistedNodeNames = options.blacklistedNodeNames
 
     pseudoLocalize(document.body);
     observer.observe(document.body, observerConfig);
@@ -9106,7 +9126,7 @@ const pseudoLocalization = (() => {
   };
 })();
 
-pseudoLocalization.start({ strategy: 'accented' });
+pseudoLocalization.start({ strategy: 'accented', blacklistedNodeNames: ['STYLE', 'text'] });
 </script>
 </body>
 </html>
