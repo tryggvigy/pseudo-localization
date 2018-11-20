@@ -1,6 +1,10 @@
-const psuedoLocalizeString = require('./localize');
+const psuedoLocalizeString = require("./localize");
 
 const pseudoLocalization = (() => {
+  const opts = {
+    blacklistedNodeNames: ["STYLE"]
+  };
+
   const textNodesUnder = element => {
     const walker = document.createTreeWalker(
       element,
@@ -8,6 +12,12 @@ const pseudoLocalization = (() => {
       node => {
         const isAllWhitespace = !/[^\s]/.test(node.nodeValue);
         if (isAllWhitespace) return NodeFilter.FILTER_REJECT;
+
+        const isBlacklistedNode = opts.blacklistedNodeNames.includes(
+          node.parentElement.nodeName
+        );
+        if (isBlacklistedNode) return NodeFilter.FILTER_REJECT;
+
         return NodeFilter.FILTER_ACCEPT;
       }
     );
@@ -57,7 +67,13 @@ const pseudoLocalization = (() => {
     subtree: true
   };
 
-  const start = (options) => {
+  const start = (
+    options = {
+      strategy: "accented",
+      blacklistedNodeNames: opts.blacklistedNodeNames
+    }
+  ) => {
+    opts.blacklistedNodeNames = options.blacklistedNodeNames;
     pseudoLocalize(document.body, options);
     observer.observe(document.body, observerConfig);
   };
@@ -69,7 +85,7 @@ const pseudoLocalization = (() => {
   return {
     start,
     stop,
-    localize: psuedoLocalizeString,
+    localize: psuedoLocalizeString
   };
 })();
 
