@@ -137,6 +137,12 @@ To catch localization problems like:
 
 In addition, the pseudo-localization process may uncover places where an element should be localizable, but is hard coded in a source language.
 
+## Docs
+`pseudo-localization` exports three functions.
+- `pseudoLocalization.start(options)`
+- `pseudoLocalization.stop()`
+- `pseudoLocalization.localize(string, options)`
+
 ### `pseudoLocalization.start(options)`
 Pseudo localizes the page and watched the DOM for additions/updates to continuously pseudo localize new content.
 
@@ -151,7 +157,7 @@ An array of [Node.nodeName](https://developer.mozilla.org/en-US/docs/Web/API/Nod
 ### `pseudoLocalization.stop()`
 Stops watching the DOM for additions/updates to continuously pseudo localize new content.
 
-### `pseudoLocalization.pseudoLocalizeString(string, options)`
+### `pseudoLocalization.localize(string, options)`
 Accepts a string to apply pseudo localization to. Returns the pseudo localized version on the string.
 This function is used by `pseudoLocalization.start` internally.
 
