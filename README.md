@@ -137,6 +137,32 @@ To catch localization problems like:
 
 In addition, the pseudo-localization process may uncover places where an element should be localizable, but is hard coded in a source language.
 
+### `pseudoLocalization.start(options)`
+Pseudo localizes the page and watched the DOM for additions/updates to continuously pseudo localize new content.
+
+Accepts an `options` object as an argument. Here are the keys in the `options` object.
+
+#### `strategy` - default (`'accented'`)
+The pseudo localization strategy to use when transforming strings. Accepted values are `accented` or `bidi`.
+
+#### `blacklistedNodeNames` - default (`['STYLE']`)
+An array of [Node.nodeName](https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName) strings that will be ignored when localizing. This is useful for skipping `<style>`, `<text>` svg nodes or other nodes that potentially doesn't make sense to apply pseudo localization to. `<style>` is skipped by default when `blacklistedNodeNames` is not provided.
+
+### `pseudoLocalization.stop()`
+Stops watching the DOM for additions/updates to continuously pseudo localize new content.
+
+### `pseudoLocalization.pseudoLocalizeString(string, options)`
+Accepts a string to apply pseudo localization to. Returns the pseudo localized version on the string.
+This function is used by `pseudoLocalization.start` internally.
+
+Accepts an `options` object as an argument. Here are the keys in the `options` object.
+
+#### `strategy` - default (`'accented'`)
+The pseudo localization strategy to use when transforming strings. Accepted values are `accented` or `bidi`.
+
+#### `blacklistedNodeNames` - default (`['STYLE']`)
+An array of [Node.nodeName](https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName) strings that will be ignored when localizing. This is useful for skipping `<style>`, `<text>` svg nodes or other nodes that potentially doesn't make sense to apply pseudo localization to. `<style>` is skipped by default when `blacklistedNodeNames` is not provided.
+
 
 ## Support
 Works in all evergreen browsers.
