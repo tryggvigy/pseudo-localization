@@ -1,3 +1,6 @@
+##1.3.0
+- Allow blacklisting nodes ([#9](https://github.com/tryggvigy/pseudo-localization/pull/9))
+
 ## 1.2.0
 - Expose `localize` function
 
