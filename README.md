@@ -120,7 +120,7 @@ experience of international users.
 
 Usage: `pseudoLocalization.start({ strategy: 'bidi' });`.
 
-Bidi English is a fake RTL locale.  All words are surrounded by
+Bidi English is a fake [RTL](https://developer.mozilla.org/en-US/docs/Glossary/rtl) locale.  All words are surrounded by
 Unicode formatting marks forcing the RTL directionality of characters.
 In addition, to make the reversed text easier to read, individual
 letters are flipped.
