@@ -30,12 +30,12 @@ const pseudoLocalization = (() => {
 
   const isNonEmptyString = (str) => str && typeof str === 'string';
 
-  const pseudoLocalize = (options, element) => {
+  const pseudoLocalize = (element) => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
       const nodeValue = textNode.nodeValue;
       if(isNonEmptyString(nodeValue)) {
-        textNode.nodeValue = psuedoLocalizeString(nodeValue, options);
+        textNode.nodeValue = psuedoLocalizeString(nodeValue, opts);
       }
     }
   };
@@ -48,7 +48,7 @@ const pseudoLocalization = (() => {
         observer.disconnect();
         // For every node added, recurse down it's subtree and convert
         // all children as well.
-        mutation.addedNodes.forEach(pseudoLocalize.bind(null, opts));
+        mutation.addedNodes.forEach(pseudoLocalize);
         observer.observe(document.body, observerConfig);
       } else if (mutation.type === "characterData") {
         // Turn the observer off while performing dom manipulation to prevent
@@ -83,7 +83,7 @@ const pseudoLocalization = (() => {
   ) => {
     opts.blacklistedNodeNames = options.blacklistedNodeNames;
     opts.strategy = options.strategy;
-    pseudoLocalize(options, document.body);
+    pseudoLocalize(document.body);
     observer.observe(document.body, observerConfig);
   };
 
