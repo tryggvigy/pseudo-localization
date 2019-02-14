@@ -34,7 +34,7 @@ const pseudoLocalization = (() => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
       const nodeValue = textNode.nodeValue;
-      if(isNonEmptyString(nodeValue)) {
+      if (isNonEmptyString(nodeValue)) {
         textNode.nodeValue = psuedoLocalizeString(nodeValue, opts);
       }
     }
@@ -62,7 +62,7 @@ const pseudoLocalization = (() => {
             nodeValue
           );
         }
-        
+
         observer.observe(document.body, observerConfig);
       }
     }
