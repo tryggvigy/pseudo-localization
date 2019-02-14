@@ -28,10 +28,15 @@ const pseudoLocalization = (() => {
     return textNodes;
   };
 
-  const pseudoLocalize = (element, options) => {
+  const isNonEmptyString = (str) => str && typeof str === 'string';
+
+  const pseudoLocalize = (options, element) => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
-      textNode.nodeValue = psuedoLocalizeString(textNode.nodeValue, options);
+      const nodeValue = textNode.nodeValue;
+      if(isNonEmptyString(nodeValue)) {
+        textNode.nodeValue = psuedoLocalizeString(nodeValue, options);
+      }
     }
   };
 
@@ -43,7 +48,7 @@ const pseudoLocalization = (() => {
         observer.disconnect();
         // For every node added, recurse down it's subtree and convert
         // all children as well.
-        mutation.addedNodes.forEach(pseudoLocalize);
+        mutation.addedNodes.forEach(pseudoLocalize.bind(null, opts));
         observer.observe(document.body, observerConfig);
       } else if (mutation.type === "characterData") {
         // Turn the observer off while performing dom manipulation to prevent
@@ -51,9 +56,12 @@ const pseudoLocalization = (() => {
         observer.disconnect();
         // The target will always be a text node so it can be converted
         // directly.
-        mutation.target.nodeValue = psuedoLocalizeString(
-          mutation.target.nodeValue
-        );
+        const nodeValue = mutation.target;
+        if(isNonEmptyString(nodeValue))
+          mutation.target.nodeValue = psuedoLocalizeString(
+            nodeValue
+          );
+
         observer.observe(document.body, observerConfig);
       }
     }
@@ -74,7 +82,8 @@ const pseudoLocalization = (() => {
     }
   ) => {
     opts.blacklistedNodeNames = options.blacklistedNodeNames;
-    pseudoLocalize(document.body, options);
+    opts.strategy = options.strategy;
+    pseudoLocalize(options, document.body);
     observer.observe(document.body, observerConfig);
   };
 
