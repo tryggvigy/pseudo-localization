@@ -126,30 +126,39 @@ const strategies = {
 };
 
 const psuedoLocalizeString = (string, options = { strategy: "accented" }) => {
-  let opts = strategies[options.strategy];
+  let strategyOptions = strategies[options.strategy];
 
   let pseudoLocalizedText = "";
   for (let character of string) {
-    if (opts.map[character]) {
+    const convertedCharacter = strategyOptions.map[character]
+    const characterAsInt = parseInt(character)
+
+    if (
+      options.elongateNumbers &&
+      !isNaN(characterAsInt) &&
+      characterAsInt >= 3
+    ) {
+      pseudoLocalizedText += character.repeat(2);
+    } else if (convertedCharacter) {
       const cl = character.toLowerCase();
       // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
       if (
-        opts.elongate &&
+        strategyOptions.elongate &&
         (cl === "a" || cl === "e" || cl === "o" || cl === "u")
       ) {
-        pseudoLocalizedText += opts.map[character] + opts.map[character];
-      } else pseudoLocalizedText += opts.map[character];
+        pseudoLocalizedText += convertedCharacter.repeat(2);
+      } else pseudoLocalizedText += strategyOptions.map[character];
     } else pseudoLocalizedText += character;
   }
 
   // If this string is from the DOM, it should already contain the pre- and postfix.
   if (
-    pseudoLocalizedText.startsWith(opts.prefix) &&
-    pseudoLocalizedText.endsWith(opts.postfix)
+    pseudoLocalizedText.startsWith(strategyOptions.prefix) &&
+    pseudoLocalizedText.endsWith(strategyOptions.postfix)
   ) {
     return pseudoLocalizedText;
   }
-  return opts.prefix + pseudoLocalizedText + opts.postfix;
+  return strategyOptions.prefix + pseudoLocalizedText + strategyOptions.postfix;
 };
 
 module.exports = psuedoLocalizeString;
