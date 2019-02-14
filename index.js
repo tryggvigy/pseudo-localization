@@ -54,14 +54,15 @@ const pseudoLocalization = (() => {
         // Turn the observer off while performing dom manipulation to prevent
         // infinite dom mutation callback loops
         observer.disconnect();
-        // The target will always be a text node so it can be converted
-        // directly.
         const nodeValue = mutation.target;
-        if(isNonEmptyString(nodeValue))
+        if (isNonEmptyString(nodeValue)) {
+          // The target will always be a text node so it can be converted
+          // directly.
           mutation.target.nodeValue = psuedoLocalizeString(
             nodeValue
           );
-
+        }
+        
         observer.observe(document.body, observerConfig);
       }
     }
