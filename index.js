@@ -84,7 +84,7 @@ const pseudoLocalization = (() => {
   ) => {
     opts.blacklistedNodeNames = blacklistedNodeNames;
     opts.strategy = strategy;
-    
+
     pseudoLocalize(document.body);
     observer.observe(document.body, observerConfig);
   };
