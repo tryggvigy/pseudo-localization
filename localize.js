@@ -108,6 +108,16 @@ const BIDI_MAP = {
   Z: "Z"
 };
 
+const NUMBER_MAP = {
+  0: '⁰',
+  1: 'ⁱ',
+  2: '²',
+  3: '³',
+  4: '⁴',
+  5: '⁵',
+  6: '⁶'
+};
+
 const strategies = {
   accented: {
     prefix: "",
@@ -136,9 +146,9 @@ const psuedoLocalizeString = (string, options = { strategy: "accented" }) => {
     if (
       options.elongateNumbers &&
       !isNaN(characterAsInt) &&
-      characterAsInt >= 3
+      NUMBER_MAP[character]
     ) {
-      pseudoLocalizedText += character.repeat(2);
+      pseudoLocalizedText += character + NUMBER_MAP[character];
     } else if (convertedCharacter) {
       const cl = character.toLowerCase();
       // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
