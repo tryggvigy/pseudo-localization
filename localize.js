@@ -108,14 +108,12 @@ const BIDI_MAP = {
   Z: "Z"
 };
 
-const NUMBER_MAP = {
+const EVEN_NUMBER_MAP = {
   0: '⁰',
-  1: 'ⁱ',
   2: '²',
-  3: '³',
   4: '⁴',
-  5: '⁵',
-  6: '⁶'
+  6: '⁶',
+  8: '⁸'
 };
 
 const strategies = {
@@ -146,12 +144,13 @@ const psuedoLocalizeString = (string, options = { strategy: "accented" }) => {
     if (
       options.elongateNumbers &&
       !isNaN(characterAsInt) &&
-      NUMBER_MAP[character]
+      EVEN_NUMBER_MAP[character]
     ) {
-      pseudoLocalizedText += character + NUMBER_MAP[character];
+      // Duplicate even numbers with superscript variations
+      pseudoLocalizedText += character + EVEN_NUMBER_MAP[character];
     } else if (convertedCharacter) {
       const cl = character.toLowerCase();
-      // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
+      // Duplicate "a", "e", "o" and "u" to emulate ~30% longer text
       if (
         strategyOptions.elongate &&
         (cl === "a" || cl === "e" || cl === "o" || cl === "u")
