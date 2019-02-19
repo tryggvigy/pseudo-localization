@@ -28,10 +28,15 @@ const pseudoLocalization = (() => {
     return textNodes;
   };
 
-  const pseudoLocalize = (element, options) => {
+  const isNonEmptyString = (str) => str && typeof str === 'string';
+
+  const pseudoLocalize = (element) => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
-      textNode.nodeValue = psuedoLocalizeString(textNode.nodeValue, options);
+      const nodeValue = textNode.nodeValue;
+      if (isNonEmptyString(nodeValue)) {
+        textNode.nodeValue = psuedoLocalizeString(nodeValue, opts);
+      }
     }
   };
 
@@ -49,11 +54,15 @@ const pseudoLocalization = (() => {
         // Turn the observer off while performing dom manipulation to prevent
         // infinite dom mutation callback loops
         observer.disconnect();
-        // The target will always be a text node so it can be converted
-        // directly.
-        mutation.target.nodeValue = psuedoLocalizeString(
-          mutation.target.nodeValue
-        );
+        const nodeValue = mutation.target;
+        if (isNonEmptyString(nodeValue)) {
+          // The target will always be a text node so it can be converted
+          // directly.
+          mutation.target.nodeValue = psuedoLocalizeString(
+            nodeValue
+          );
+        }
+
         observer.observe(document.body, observerConfig);
       }
     }
@@ -68,13 +77,15 @@ const pseudoLocalization = (() => {
   };
 
   const start = (
-    options = {
-      strategy: "accented",
-      blacklistedNodeNames: opts.blacklistedNodeNames
-    }
+    {
+      strategy = "accented",
+      blacklistedNodeNames = opts.blacklistedNodeNames
+    } = {}
   ) => {
-    opts.blacklistedNodeNames = options.blacklistedNodeNames;
-    pseudoLocalize(document.body, options);
+    opts.blacklistedNodeNames = blacklistedNodeNames;
+    opts.strategy = strategy;
+    
+    pseudoLocalize(document.body);
     observer.observe(document.body, observerConfig);
   };
 
