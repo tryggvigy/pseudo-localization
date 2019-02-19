@@ -77,13 +77,14 @@ const pseudoLocalization = (() => {
   };
 
   const start = (
-    options = {
-      strategy: "accented",
-      blacklistedNodeNames: opts.blacklistedNodeNames
-    }
+    {
+      strategy = "accented",
+      blacklistedNodeNames = opts.blacklistedNodeNames
+    } = {}
   ) => {
-    opts.blacklistedNodeNames = options.blacklistedNodeNames;
-    opts.strategy = options.strategy;
+    opts.blacklistedNodeNames = blacklistedNodeNames;
+    opts.strategy = strategy;
+    
     pseudoLocalize(document.body);
     observer.observe(document.body, observerConfig);
   };
