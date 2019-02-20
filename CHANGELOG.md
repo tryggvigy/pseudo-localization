@@ -1,3 +1,6 @@
+##2.0.1
+- Mention in package.json description that `pseudo-localization` works with nodejs.
+
 ##2.0.0
 - Safeguard childlist mutations and empty strings https://github.com/tryggvigy/pseudo-localization/pull/12
   - Fixes https://github.com/tryggvigy/pseudo-localization/issues/6 and https://github.com/tryggvigy/pseudo-localization/issues/11
