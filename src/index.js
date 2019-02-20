@@ -68,7 +68,10 @@ const pseudoLocalization = (() => {
         observer.observe(document.body, observerConfig);
       } else if (mutation.type === "characterData") {
         const nodeValue = mutation.target.nodeValue;
-        if (isNonEmptyString(nodeValue)) {
+        const isBlacklistedNode = opts.blacklistedNodeNames.includes(
+          mutation.target.parentElement.nodeName
+        );
+        if (isNonEmptyString(nodeValue) && !isBlacklistedNode) {
           // Turn the observer off while performing dom manipulation to prevent
           // infinite dom mutation callback loops
           observer.disconnect();
