@@ -117,7 +117,7 @@ const strategies = {
   },
   bidi: {
     // Surround words with Unicode formatting marks forcing
-    // the RTL directionality of characters.
+    // the RTL directionality of characters
     prefix: "\u202e",
     postfix: "\u202c",
     map: BIDI_MAP,
@@ -125,8 +125,8 @@ const strategies = {
   }
 };
 
-const psuedoLocalizeString = (string, options = { strategy: "accented" }) => {
-  let opts = strategies[options.strategy];
+const pseudoLocalizeString = (string, { strategy = "accented" } = {}) => {
+  let opts = strategies[strategy];
 
   let pseudoLocalizedText = "";
   for (let character of string) {
@@ -142,7 +142,7 @@ const psuedoLocalizeString = (string, options = { strategy: "accented" }) => {
     } else pseudoLocalizedText += character;
   }
 
-  // If this string is from the DOM, it should already contain the pre- and postfix.
+  // If this string is from the DOM, it should already contain the pre- and postfix
   if (
     pseudoLocalizedText.startsWith(opts.prefix) &&
     pseudoLocalizedText.endsWith(opts.postfix)
@@ -152,4 +152,4 @@ const psuedoLocalizeString = (string, options = { strategy: "accented" }) => {
   return opts.prefix + pseudoLocalizedText + opts.postfix;
 };
 
-module.exports = psuedoLocalizeString;
+export default pseudoLocalizeString;

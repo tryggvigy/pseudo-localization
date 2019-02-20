@@ -1,8 +1,24 @@
-const psuedoLocalizeString = require("./localize");
+import pseudoLocalizeString from "./localize.js";
+
+/**
+ * export the underlying pseudo localization function so this import style
+ *  import { localize } from 'pseudo-localization';
+ * can be used.
+ */
+export { default as localize } from "./localize.js";
 
 const pseudoLocalization = (() => {
   const opts = {
     blacklistedNodeNames: ["STYLE"]
+  };
+
+  // Observer for dom updates. Initialization is defered to make parts
+  // of the API safe to use in non-browser environments like nodejs
+  let observer = null;
+  const observerConfig = {
+    characterData: true,
+    childList: true,
+    subtree: true
   };
 
   const textNodesUnder = element => {
@@ -28,76 +44,66 @@ const pseudoLocalization = (() => {
     return textNodes;
   };
 
-  const isNonEmptyString = (str) => str && typeof str === 'string';
+  const isNonEmptyString = str => str && typeof str === "string";
 
-  const pseudoLocalize = (element) => {
+  const pseudoLocalize = element => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
       const nodeValue = textNode.nodeValue;
       if (isNonEmptyString(nodeValue)) {
-        textNode.nodeValue = psuedoLocalizeString(nodeValue, opts);
+        textNode.nodeValue = pseudoLocalizeString(nodeValue, opts);
       }
     }
   };
 
   const domMutationCallback = mutationsList => {
-    for (var mutation of mutationsList) {
+    for (let mutation of mutationsList) {
       if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
         // Turn the observer off while performing dom manipulation to prevent
         // infinite dom mutation callback loops
         observer.disconnect();
         // For every node added, recurse down it's subtree and convert
-        // all children as well.
+        // all children as well
         mutation.addedNodes.forEach(pseudoLocalize);
         observer.observe(document.body, observerConfig);
       } else if (mutation.type === "characterData") {
-        // Turn the observer off while performing dom manipulation to prevent
-        // infinite dom mutation callback loops
-        observer.disconnect();
-        const nodeValue = mutation.target;
+        const nodeValue = mutation.target.nodeValue;
         if (isNonEmptyString(nodeValue)) {
+          // Turn the observer off while performing dom manipulation to prevent
+          // infinite dom mutation callback loops
+          observer.disconnect();
           // The target will always be a text node so it can be converted
-          // directly.
-          mutation.target.nodeValue = psuedoLocalizeString(
-            nodeValue
-          );
+          // directly
+          mutation.target.nodeValue = pseudoLocalizeString(nodeValue, opts);
+          observer.observe(document.body, observerConfig);
         }
-
-        observer.observe(document.body, observerConfig);
       }
     }
   };
 
-  // Observe dom update and pseudo localize changed nodes.
-  const observer = new MutationObserver(domMutationCallback);
-  const observerConfig = {
-    characterData: true,
-    childList: true,
-    subtree: true
-  };
-
-  const start = (
-    {
-      strategy = "accented",
-      blacklistedNodeNames = opts.blacklistedNodeNames
-    } = {}
-  ) => {
+  const start = ({
+    strategy = "accented",
+    blacklistedNodeNames = opts.blacklistedNodeNames
+  } = {}) => {
     opts.blacklistedNodeNames = blacklistedNodeNames;
     opts.strategy = strategy;
-    
+    // Pseudo localize the DOM
     pseudoLocalize(document.body);
+    // Start observing the DOM for changes and run
+    // pseudo localization on any added text nodes
+    observer = new MutationObserver(domMutationCallback);
     observer.observe(document.body, observerConfig);
   };
 
   const stop = () => {
-    observer.disconnect();
+    observer && observer.disconnect();
   };
 
   return {
     start,
     stop,
-    localize: psuedoLocalizeString
+    localize: pseudoLocalizeString,
   };
 })();
 
-module.exports = pseudoLocalization;
+export default pseudoLocalization;
