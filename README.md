@@ -8,6 +8,8 @@
 
 ---
 
+[![Edit pseudo-localization-react](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1q7n08or4j)
+
 `pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) against the DOM or individual strings.
 
 [Demo here](https://tryggvigy.github.io/pseudo-localization/hamlet.html). Changing text nodes and adding or removing trees of elements will trigger a pseudo-localization run on all the new text added to the DOM. Try it yourself by changing text or adding/removing elements using the devtools.
