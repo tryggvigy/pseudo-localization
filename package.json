@@ -2,24 +2,36 @@
   "name": "pseudo-localization",
   "version": "1.3.0",
   "description": "Dynamic pseudo-localization in the browser",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
+    "start": "node devserver.js",
+    "prepare": "babel src --out-dir lib --minified --no-comments --source-maps",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tryggvi Gylfason (http://twitter.com/tryggvigy)",
   "keywords": [
     "internationalization",
     "localization",
+    "pseudo-localization",
     "l10n",
     "i18n",
-    "psuedo",
+    "pseudo",
     "language",
     "translation",
-    "psuedo-localize"
+    "pseudo-localize"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tryggvigy/pseudo-localization.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.3",
+    "@babel/preset-env": "7.3.1"
+  },
+  "dependencies": {}
 }

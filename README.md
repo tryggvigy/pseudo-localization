@@ -8,7 +8,7 @@
 
 ---
 
-`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) against the DOM.
+`pseudo-localization` is a script that performs [pseudolocalization](https://en.wikipedia.org/wiki/Pseudolocalization) against the DOM or individual strings.
 
 [Demo here](https://tryggvigy.github.io/pseudo-localization/hamlet.html). Changing text nodes and adding or removing trees of elements will trigger a pseudolocalization run on all the new text added to the DOM. Try it using the devtools.
 
@@ -20,17 +20,19 @@ npm install pseudo-localization
 ```
 
 ### Raw script (without npm)
-Copy paste the script in it's entirty from [here](https://github.com/tryggvigy/pseudo-localization/blob/master/hamlet.html#L8873-L9029) and use as you wish.
+Copy paste the files in [`src`](https://github.com/tryggvigy/pseudo-localization/blob/master/src) and use as you wish. It's not a lot of code.
 
 
 # Usage
 
 ### import or require the npm module
 
-`pseudo-localization` is just a script and can be invoked like so:
+`pseudo-localization` can be used like so:
 
 ```js
-const pseudoLocalization = require('pseudo-localization'); 
+import pseudoLocalization from 'pseudo-localization';
+// Or using CommonJS
+// const pseudoLocalization = require('pseudo-localization').default;
 
 pseudoLocalization.start();
 
@@ -68,19 +70,19 @@ class Page extends React.Component {
 }
 ```
 
-You can also call the underlying `localize` function to pseudo-localize any string.
+You can also call the underlying `localize` function to pseudo-localize any string. This is useful for non-browser environments like nodejs.
 
 
 ```js
 import { localize } from 'pseudo-localization';
-// OR
-import localize from 'pseudo-localization/localize';
+// Or using CommonJS
+// const { localize } = require('pseudo-localization');
 
 console.log(localize('hello')); // --> ħḗḗŀŀǿǿ
 console.log(localize('hello', { strategy: 'bidi' })); // --> oʅʅǝɥ
 ```
 
-A good use-case for `localize` is testing that strings are _actually_ being localized and not hard coded. 
+A good use-case for `localize` is testing that strings are _actually_ being localized and not hard coded.
 
 ```js
 import { localize } from 'pseudo-localization';
@@ -165,9 +167,6 @@ Accepts an `options` object as an argument. Here are the keys in the `options` o
 
 #### `strategy` - default (`'accented'`)
 The pseudo localization strategy to use when transforming strings. Accepted values are `accented` or `bidi`.
-
-#### `blacklistedNodeNames` - default (`['STYLE']`)
-An array of [Node.nodeName](https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName) strings that will be ignored when localizing. This is useful for skipping `<style>`, `<text>` svg nodes or other nodes that potentially doesn't make sense to apply pseudo localization to. `<style>` is skipped by default when `blacklistedNodeNames` is not provided.
 
 
 ## Support
