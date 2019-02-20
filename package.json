@@ -1,6 +1,6 @@
 {
   "name": "pseudo-localization",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Dynamic pseudo-localization in the browser and nodejs",
   "main": "lib/index.js",
   "files": [

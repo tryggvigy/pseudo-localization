@@ -1,3 +1,6 @@
+##2.0.2
+- Fix a bug where blacklisted nodes would get pseudo-localized when mutated in the DOM
+
 ##2.0.1
 - Mention in package.json description that `pseudo-localization` works with nodejs.
 
