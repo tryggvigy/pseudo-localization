@@ -9,22 +9,28 @@
     import pseudoLocalization, {localize} from './src/index.js';
     pseudoLocalization.start({
       strategy: 'accented',
-      blacklistedNodeNames: ['STYLE', 'text']
+      blacklistedNodeNames: ['STYLE', 'text', 'PRE']
     });
 
     console.log(localize('Some Localized String'));
   </script>
 </head>
 <body>
+  <pre>
+      Changing text nodes and adding or removing trees of elements
+      will trigger a pseudo-localization run on all the new text added to the DOM.
+      Try it yourself by changing text or adding/removing elements using the devtools.
+  </pre>
+
   <!-- ==== TEST SECTION BEGINS ==== -->
   <h1>Testing Section</h1>
   <!-- Comments should be left alone -->
   <!-- &nbsp; should be ignored -->
   &nbsp;
   <!-- Whitespace shouldn't count towards added eloncation symbol count -->
-  <span> hey </span> <br />
+  <span>  whitespace not counted  </span> <br />
 
-  <bidi>Hello bidirectional text!</bidi> <br />
+  <bidi>Bidirectional text</bidi> <br />
 
   <!-- Elements who are blacklisted should be left alone. -->
   <style>
@@ -32,9 +38,9 @@
       color: rebeccapurple;
     }
   </style>
-  <div class="abcd">My style node was left alone so I'm purple.</div>
+  <div class="abcd">My style node was left alone so I'm purple</div>
   <svg height="30">
-    <text x="0" y="15" fill="red">svg text node left alone!</text>
+    <text x="0" y="15" fill="red">svg text node left alone</text>
   </svg>
   <br />
 
