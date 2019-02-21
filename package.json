@@ -9,9 +9,10 @@
   "scripts": {
     "start": "node devserver.js",
     "prepare": "babel src --out-dir lib --minified --no-comments --source-maps",
+    "build": "babel src --out-dir lib --minified --no-comments --source-maps",
     "check-formatting": "prettier --list-different src/**/*.js",
-    "test-js": "jest",
-    "test": "jest && npm run check-formatting"
+    "test-js": "jest src/*",
+    "test": "npm run test-js jest && npm run check-formatting"
   },
   "author": "Tryggvi Gylfason (http://twitter.com/tryggvigy)",
   "keywords": [
