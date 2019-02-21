@@ -1,15 +1,15 @@
-import pseudoLocalizeString from "./localize.js";
+import pseudoLocalizeString from './localize.js';
 
 /**
  * export the underlying pseudo localization function so this import style
  *  import { localize } from 'pseudo-localization';
  * can be used.
  */
-export { default as localize } from "./localize.js";
+export { default as localize } from './localize.js';
 
 const pseudoLocalization = (() => {
   const opts = {
-    blacklistedNodeNames: ["STYLE"]
+    blacklistedNodeNames: ['STYLE'],
   };
 
   // Observer for dom updates. Initialization is defered to make parts
@@ -18,7 +18,7 @@ const pseudoLocalization = (() => {
   const observerConfig = {
     characterData: true,
     childList: true,
-    subtree: true
+    subtree: true,
   };
 
   const textNodesUnder = element => {
@@ -44,7 +44,7 @@ const pseudoLocalization = (() => {
     return textNodes;
   };
 
-  const isNonEmptyString = str => str && typeof str === "string";
+  const isNonEmptyString = str => str && typeof str === 'string';
 
   const pseudoLocalize = element => {
     const textNodesUnderElement = textNodesUnder(element);
@@ -58,7 +58,7 @@ const pseudoLocalization = (() => {
 
   const domMutationCallback = mutationsList => {
     for (let mutation of mutationsList) {
-      if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
         // Turn the observer off while performing dom manipulation to prevent
         // infinite dom mutation callback loops
         observer.disconnect();
@@ -66,7 +66,7 @@ const pseudoLocalization = (() => {
         // all children as well
         mutation.addedNodes.forEach(pseudoLocalize);
         observer.observe(document.body, observerConfig);
-      } else if (mutation.type === "characterData") {
+      } else if (mutation.type === 'characterData') {
         const nodeValue = mutation.target.nodeValue;
         const isBlacklistedNode = opts.blacklistedNodeNames.includes(
           mutation.target.parentElement.nodeName
@@ -85,8 +85,8 @@ const pseudoLocalization = (() => {
   };
 
   const start = ({
-    strategy = "accented",
-    blacklistedNodeNames = opts.blacklistedNodeNames
+    strategy = 'accented',
+    blacklistedNodeNames = opts.blacklistedNodeNames,
   } = {}) => {
     opts.blacklistedNodeNames = blacklistedNodeNames;
     opts.strategy = strategy;

@@ -1,7 +1,7 @@
-var http = require("http");
-var url = require("url");
-var fs = require("fs");
-var path = require("path");
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+var path = require('path');
 var baseDirectory = __dirname;
 
 var port = 8080;
@@ -17,17 +17,17 @@ http
       // Force correct content-type for JavaScript
       // This is a work-around for an issue where
       // es6 modules have "" as content-type.
-      if (fsPath.endsWith(".js")) {
-        response.setHeader("content-type", "text/javascript");
+      if (fsPath.endsWith('.js')) {
+        response.setHeader('content-type', 'text/javascript');
       }
 
       var fileStream = fs.createReadStream(fsPath);
 
       fileStream.pipe(response);
-      fileStream.on("open", function() {
+      fileStream.on('open', function() {
         response.writeHead(200);
       });
-      fileStream.on("error", function(e) {
+      fileStream.on('error', function(e) {
         response.writeHead(404); // assume the file doesn't exist
         response.end();
       });
@@ -39,4 +39,4 @@ http
   })
   .listen(port);
 
-console.log("Serving http://localhost:" + port + '/hamlet.html');
+console.log('Serving http://localhost:' + port + '/hamlet.html');
