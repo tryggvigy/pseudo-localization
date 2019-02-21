@@ -8,8 +8,7 @@
   ],
   "scripts": {
     "start": "node devserver.js",
-    "prepare": "babel src --out-dir lib --minified --no-comments --source-maps",
-    "build": "babel src --out-dir lib --minified --no-comments --source-maps",
+    "prepare": "babel src --out-dir lib --minified --no-comments --source-maps --ignore '**/*.test.js'",
     "check-formatting": "prettier --list-different src/**/*.js",
     "test-js": "jest src/*",
     "test": "npm run test-js jest && npm run check-formatting"
