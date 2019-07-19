@@ -72,6 +72,34 @@ class Page extends React.Component {
 }
 ```
 
+Using hooks? Here's an example:
+
+```jsx
+import React from 'react';
+import pseudoLocalization from 'pseudo-localization';
+
+function PseudoLocalization() {
+  React.useEffect(() => {
+    pseudoLocalization.start();
+
+    return () => {
+      pseudoLocalization.stop()
+    };
+  }, []);
+}
+
+// And use it
+
+function Page() {
+  return (
+    <main>
+      <PseudoLocalization />
+      <h1>I will get pseudo localized along with everything else under document.body!</h1>
+    <main>
+  );
+}
+```
+
 You can also call the underlying `localize` function to pseudo-localize any string. This is useful for non-browser environments like nodejs.
 
 

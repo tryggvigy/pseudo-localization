@@ -1,0 +1,101 @@
+#! /usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const getStdin = require('get-stdin');
+
+const { localize } = require('../lib/index');
+
+const argv = require('yargs')
+  .usage(
+    '$0 [src] [options]',
+    'Pseudo localize a JSON file or JavaScript object',
+    function(yargs) {
+      yargs.positional('src', {
+        describe: 'The source as a path or from STDIN',
+        type: 'string',
+        coerce: path.resolve,
+      });
+    }
+  )
+  .options({
+    o: {
+      alias: 'output',
+      describe:
+        'Writes output to STDOUT by default. Optionally specify a JSON file to write the pseudo-localizations to',
+      type: 'string',
+      coerce: path.resolve,
+    },
+    debug: {
+      describe: 'Print out all stack traces and other debug info',
+      type: 'boolean',
+    },
+    'pretty': {
+      describe: 'Pretty print JSON output',
+      type: 'boolean',
+    }
+  })
+  .help()
+  .version().argv;
+
+const debug = function (e) {
+  if (argv.debug) {
+    console.error(e);
+  }
+};
+
+const convert = function (json) {
+  for (let key in json) {
+    // this will need ot be updated if other primitives
+    // support pseudo-localization
+    if (typeof json[key] === 'string') {
+      json[key] = localize(json[key]);
+    }
+  }
+
+  const output = JSON.stringify(json, null, argv.pretty ? 4 : undefined);
+  argv.output ? fs.writeFileSync(argv.output, output) : fs.writeSync(1, output + '\n');
+};
+
+(function() {
+  'use strict';
+
+  let json = null;
+
+  if (argv.src) {
+    try {
+      json = require(argv.src);
+
+      if (json.default) {
+        json = json.default;
+      }
+
+      convert(json);
+    } catch (e) {
+      debug(e);
+
+      console.error(
+        `${e.message}\nUnable to parse input file. Make sure it is in JSON format or is an exported JS module`
+      );
+
+      process.exit(1);
+    }
+  } else {
+    getStdin()
+      .then(function(input) {
+        if (!input) {
+          console.warn('No input from STDIN detected. Exiting...');
+          process.exit(0);
+        }
+
+        debugger;
+        convert(JSON.parse(input));
+      })
+      .catch(function(e) {
+        debug(e);
+        console.error(
+          `${e.message}\nUnable to parse source from STDIN. Is it a valid JSON file?`
+        );
+      });
+  }
+})(argv);
