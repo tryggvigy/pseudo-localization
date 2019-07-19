@@ -198,6 +198,39 @@ Accepts an `options` object as an argument. Here are the keys in the `options` o
 #### `strategy` - default (`'accented'`)
 The pseudo localization strategy to use when transforming strings. Accepted values are `accented` or `bidi`.
 
+## CLI Interface
+For easy scripting a CLI interface is exposed. The interface supports JSON files and JS modules.
+
+```bash
+npx pseudo-localize ./path/to/file.json
+
+# pass in a JS transpiled ES module or CJS module
+npx pseudo-localize ./path/to/file
+
+# pass in JSON files through STDIN
+cat ./path/to/file.json | npx pseudo-localize --strategy bidi
+```
+
+CLI Options:
+
+```
+pseudo-localize [src] [options]
+
+Pseudo localize a JSON file or JavaScript object
+
+Positionals:
+  src  The source as a path or from STDIN                               [string]
+
+Options:
+  -o, --output  Writes output to STDOUT by default. Optionally specify a JSON
+                file to write the pseudo-localizations to               [string]
+  --debug       Print out all stack traces and other debug info        [boolean]
+  --pretty      Pretty print JSON output                               [boolean]
+  --strategy    Set the strategy for localization
+                             [choices: "accented", "bidi"] [default: "accented"]
+  --help        Show help                                              [boolean]
+  --version     Show version number                                    [boolean]
+```
 
 ## Support
 Works in all evergreen browsers.

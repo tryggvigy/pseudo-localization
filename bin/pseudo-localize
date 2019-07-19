@@ -33,6 +33,11 @@ const argv = require('yargs')
     'pretty': {
       describe: 'Pretty print JSON output',
       type: 'boolean',
+    },
+    'strategy': {
+      describe: 'Set the strategy for localization',
+      choices: ['accented', 'bidi'],
+      default: 'accented'
     }
   })
   .help()
@@ -45,11 +50,13 @@ const debug = function (e) {
 };
 
 const convert = function (json) {
+  const options = { strategy: argv.strategy };
+
   for (let key in json) {
     // this will need ot be updated if other primitives
     // support pseudo-localization
     if (typeof json[key] === 'string') {
-      json[key] = localize(json[key]);
+      json[key] = localize(json[key], options);
     }
   }
 
