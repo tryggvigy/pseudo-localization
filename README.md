@@ -204,11 +204,17 @@ For easy scripting a CLI interface is exposed. The interface supports JSON files
 ```bash
 npx pseudo-localize ./path/to/file.json
 
-# pass in a JS transpiled ES module or CJS module
+# pass in a JS transpiled ES module or an exported CJS module
 npx pseudo-localize ./path/to/file
 
 # pass in JSON files through STDIN
 cat ./path/to/file.json | npx pseudo-localize --strategy bidi
+
+# pass a string via a pipe
+echo hello world | npx pseudo-localize
+
+# direct input pseudo-localization
+npx pseudo-localize -i "hello world"
 ```
 
 CLI Options:
@@ -216,7 +222,7 @@ CLI Options:
 ```
 pseudo-localize [src] [options]
 
-Pseudo localize a JSON file or JavaScript object
+Pseudo localize a string, JSON file, or a JavaScript object
 
 Positionals:
   src  The source as a path or from STDIN                               [string]
@@ -224,6 +230,7 @@ Positionals:
 Options:
   -o, --output  Writes output to STDOUT by default. Optionally specify a JSON
                 file to write the pseudo-localizations to               [string]
+  -i, --input   Pass in direct input to pseudo-localize                 [string]
   --debug       Print out all stack traces and other debug info        [boolean]
   --pretty      Pretty print JSON output                               [boolean]
   --strategy    Set the strategy for localization
