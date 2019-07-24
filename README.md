@@ -199,7 +199,7 @@ Accepts an `options` object as an argument. Here are the keys in the `options` o
 The pseudo localization strategy to use when transforming strings. Accepted values are `accented` or `bidi`.
 
 ## CLI Interface
-For easy scripting a CLI interface is exposed. The interface supports JSON files and JS modules.
+For easy scripting a CLI interface is exposed. The interface supports raw input, JSON files, and CommonJS modules.
 
 ```bash
 npx pseudo-localize ./path/to/file.json

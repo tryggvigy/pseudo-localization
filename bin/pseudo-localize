@@ -69,7 +69,7 @@ const convert = function(input) {
   }
 
   for (let key in input) {
-    // this will need ot be updated if other primitives
+    // this will need to be updated if other primitives
     // support pseudo-localization
     if (typeof input[key] === 'string') {
       input[key] = localize(input[key], options);
