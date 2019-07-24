@@ -32,9 +32,9 @@ Copy paste the files in [`src`](https://github.com/tryggvigy/pseudo-localization
 `pseudo-localization` can be used like so:
 
 ```js
-import pseudoLocalization from 'pseudo-localization';
+import * as pseudoLocalization from 'pseudo-localization';
 // Or using CommonJS
-// const pseudoLocalization = require('pseudo-localization').default;
+// const pseudoLocalization = require('pseudo-localization');
 
 pseudoLocalization.start();
 
@@ -47,14 +47,14 @@ component lifecycles. In React for example:
 
 ```js
 import React from 'react';
-import pseudoLocalization from 'pseudo-localization';
+import { start, stop } from 'pseudo-localization';
 
 class PseudoLocalization extends React.Component {
   componentDidMount() {
-    pseudoLocalization.start();
+    start();
   }
   componentWillUnmount() {
-    pseudoLocalization.stop();
+    stop();
   }
 }
 
@@ -108,7 +108,7 @@ Any strings that do not pass through the translation function will now stand out
 
 ### accented - Ȧȧƈƈḗḗƞŧḗḗḓ Ḗḗƞɠŀīīşħ
 
-Usage: `pseudoLocalization.start({ strategy: 'accented' });` or simply `pseudoLocalization.start();`.
+Usage: `start({ strategy: 'accented' });` or simply `start();`.
 
 In Accented English all Latin letters are replaced by accented
 Unicode counterparts which don't impair the readability of the content.
@@ -122,7 +122,7 @@ experience of international users.
 
 ### bidi - ɥsıʅƃuƎ ıpıԐ
 
-Usage: `pseudoLocalization.start({ strategy: 'bidi' });`.
+Usage: `start({ strategy: 'bidi' });`.
 
 Bidi English is a fake [RTL](https://developer.mozilla.org/en-US/docs/Glossary/rtl) locale.  All words are surrounded by
 Unicode formatting marks forcing the RTL directionality of characters.
@@ -143,11 +143,11 @@ In addition, the pseudo-localization process may uncover places where an element
 
 ## Docs
 `pseudo-localization` exports three functions.
-- `pseudoLocalization.start(options)`
-- `pseudoLocalization.stop()`
-- `pseudoLocalization.localize(string, options)`
+- `start(options)`
+- `stop()`
+- `localize(string, options)`
 
-### `pseudoLocalization.start(options)`
+### `start(options)`
 Pseudo localizes the page and watched the DOM for additions/updates to continuously pseudo localize new content.
 
 Accepts an `options` object as an argument. Here are the keys in the `options` object.
@@ -158,12 +158,12 @@ The pseudo localization strategy to use when transforming strings. Accepted valu
 #### `blacklistedNodeNames` - default (`['STYLE']`)
 An array of [Node.nodeName](https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName) strings that will be ignored when localizing. This is useful for skipping `<style>`, `<text>` svg nodes or other nodes that potentially doesn't make sense to apply pseudo localization to. `<style>` is skipped by default when `blacklistedNodeNames` is not provided.
 
-### `pseudoLocalization.stop()`
+### `stop()`
 Stops watching the DOM for additions/updates to continuously pseudo localize new content.
 
-### `pseudoLocalization.localize(string, options)`
+### `localize(string, options)`
 Accepts a string to apply pseudo localization to. Returns the pseudo localized version on the string.
-This function is used by `pseudoLocalization.start` internally.
+This function is used by the `start` function internally.
 
 Accepts an `options` object as an argument. Here are the keys in the `options` object.
 
