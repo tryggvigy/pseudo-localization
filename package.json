@@ -10,8 +10,9 @@
     "start": "node devserver.js",
     "prepare": "babel src --out-dir lib --minified --no-comments --source-maps --ignore '**/*.test.js'",
     "check-formatting": "prettier --list-different src/**/*.js",
+    "lint": "eslint src/**/*.js",
     "test-js": "jest src/*",
-    "test": "npm run test-js jest && npm run check-formatting"
+    "test": "npm run test-js jest && npm run check-formatting && npm run lint"
   },
   "author": "Tryggvi Gylfason (http://twitter.com/tryggvigy)",
   "keywords": [
@@ -35,6 +36,7 @@
     "@babel/core": "7.3.3",
     "@babel/preset-env": "7.3.1",
     "babel-jest": "24.1.0",
+    "eslint": "^6.1.0",
     "jest-cli": "24.1.0",
     "prettier": "1.16.4"
   },
