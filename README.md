@@ -72,6 +72,34 @@ class Page extends React.Component {
 }
 ```
 
+Using hooks? Here's an example:
+
+```jsx
+import React from 'react';
+import pseudoLocalization from 'pseudo-localization';
+
+function PseudoLocalization() {
+  React.useEffect(() => {
+    pseudoLocalization.start();
+
+    return () => {
+      pseudoLocalization.stop()
+    };
+  }, []);
+}
+
+// And use it
+
+function Page() {
+  return (
+    <main>
+      <PseudoLocalization />
+      <h1>I will get pseudo localized along with everything else under document.body!</h1>
+    <main>
+  );
+}
+```
+
 You can also call the underlying `localize` function to pseudo-localize any string. This is useful for non-browser environments like nodejs.
 
 
@@ -170,6 +198,46 @@ Accepts an `options` object as an argument. Here are the keys in the `options` o
 #### `strategy` - default (`'accented'`)
 The pseudo localization strategy to use when transforming strings. Accepted values are `accented` or `bidi`.
 
+## CLI Interface
+For easy scripting a CLI interface is exposed. The interface supports raw input, JSON files, and CommonJS modules.
+
+```bash
+npx pseudo-localize ./path/to/file.json
+
+# pass in a JS transpiled ES module or an exported CJS module
+npx pseudo-localize ./path/to/file
+
+# pass in JSON files through STDIN
+cat ./path/to/file.json | npx pseudo-localize --strategy bidi
+
+# pass a string via a pipe
+echo hello world | npx pseudo-localize
+
+# direct input pseudo-localization
+npx pseudo-localize -i "hello world"
+```
+
+CLI Options:
+
+```
+pseudo-localize [src] [options]
+
+Pseudo localize a string, JSON file, or a JavaScript object
+
+Positionals:
+  src  The source as a path or from STDIN                               [string]
+
+Options:
+  -o, --output  Writes output to STDOUT by default. Optionally specify a JSON
+                file to write the pseudo-localizations to               [string]
+  -i, --input   Pass in direct input to pseudo-localize                 [string]
+  --debug       Print out all stack traces and other debug info        [boolean]
+  --pretty      Pretty print JSON output                               [boolean]
+  --strategy    Set the strategy for localization
+                             [choices: "accented", "bidi"] [default: "accented"]
+  --help        Show help                                              [boolean]
+  --version     Show version number                                    [boolean]
+```
 
 ## Support
 Works in all evergreen browsers.

@@ -1,11 +1,12 @@
 {
   "name": "pseudo-localization",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Dynamic pseudo-localization in the browser and nodejs",
   "main": "lib/index.js",
   "files": [
     "lib"
   ],
+  "bin": "./bin/pseudo-localize",
   "scripts": {
     "start": "node devserver.js",
     "prepare": "babel src --out-dir lib --minified --no-comments --source-maps --ignore '**/*.test.js'",
@@ -32,13 +33,16 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "7.2.3",
-    "@babel/core": "7.3.3",
-    "@babel/preset-env": "7.3.1",
-    "babel-jest": "24.1.0",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-jest": "^24.8.0",
     "eslint": "^6.1.0",
-    "jest-cli": "24.1.0",
-    "prettier": "1.16.4"
+    "jest-cli": "^24.8.0",
+    "prettier": "^1.18.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "get-stdin": "^7.0.0",
+    "yargs": "^13.3.0"
+  }
 }

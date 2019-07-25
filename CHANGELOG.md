@@ -1,3 +1,6 @@
+##2.1.0
+- Adding CLI interface
+
 ##2.0.2
 - Fix a bug where blacklisted nodes would get pseudo-localized when mutated in the DOM
 
