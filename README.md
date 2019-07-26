@@ -202,25 +202,25 @@ The pseudo localization strategy to use when transforming strings. Accepted valu
 For easy scripting a CLI interface is exposed. The interface supports raw input, JSON files, and CommonJS modules.
 
 ```bash
-npx pseudo-localize ./path/to/file.json
+npx pseudo-localization ./path/to/file.json
 
 # pass in a JS transpiled ES module or an exported CJS module
-npx pseudo-localize ./path/to/file
+npx pseudo-localization ./path/to/file
 
 # pass in JSON files through STDIN
-cat ./path/to/file.json | npx pseudo-localize --strategy bidi
+cat ./path/to/file.json | npx pseudo-localization --strategy bidi
 
 # pass a string via a pipe
-echo hello world | npx pseudo-localize
+echo hello world | npx pseudo-localization
 
 # direct input pseudo-localization
-npx pseudo-localize -i "hello world"
+npx pseudo-localization -i "hello world"
 ```
 
 CLI Options:
 
 ```
-pseudo-localize [src] [options]
+pseudo-localization [src] [options]
 
 Pseudo localize a string, JSON file, or a JavaScript object
 
@@ -230,7 +230,7 @@ Positionals:
 Options:
   -o, --output  Writes output to STDOUT by default. Optionally specify a JSON
                 file to write the pseudo-localizations to               [string]
-  -i, --input   Pass in direct input to pseudo-localize                 [string]
+  -i, --input   Pass in direct input to pseudo-localization                 [string]
   --debug       Print out all stack traces and other debug info        [boolean]
   --pretty      Pretty print JSON output                               [boolean]
   --strategy    Set the strategy for localization
