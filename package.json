@@ -4,7 +4,8 @@
   "description": "Dynamic pseudo-localization in the browser and nodejs",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "bin"
   ],
   "bin": "./bin/pseudo-localize",
   "scripts": {
