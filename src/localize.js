@@ -145,16 +145,18 @@ const textExpander = (string, numDuplicateChars = 0, expansionRatio = 1) => {
   let expandedText = '';
   let count = 0;
   const repeatTimes = Math.ceil(expansionRatio);
+  let maxIndex = numDuplicateChars + string.length;
 
   for (const c of string) {
     if (isAlpha(c) && count < numDuplicateChars) {
       expandedText += c.repeat(repeatTimes);
-      count += repeatTimes;
+      count += repeatTimes - 1;
     } else {
       expandedText += c;
     }
   }
-  return expandedText;
+
+  return expandedText.substring(0, maxIndex);
 };
 
 const textExpansionHandler = (string, toBeExpanded) => {

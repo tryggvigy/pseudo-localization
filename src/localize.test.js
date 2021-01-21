@@ -2,11 +2,11 @@ import localize from './localize';
 
 describe('localize', () => {
   test('accented', () => {
-    expect(localize('abcd')).toBe('ȧȧȧƀƀƀƈḓ');
+    expect(localize('abcd')).toBe('ȧȧȧƀƀƀƈƈƈḓ');
     // aeou are duplicated
-    expect(localize('aeou')).toBe('ȧȧȧḗḗḗǿŭ');
-    expect(localize('foo bar')).toBe('ƒƒƒǿǿǿǿǿǿ ƀƀƀȧř');
-    expect(localize('CAPITAL_LETTERS')).toBe('ƇƇȦȦƤƤĪĪŦŦȦȦĿĿ_ĿḖŦŦḖŘŞ');
+    expect(localize('aeou')).toBe('ȧȧȧḗḗḗǿǿǿŭ');
+    expect(localize('foo bar')).toBe('ƒƒƒǿǿǿǿǿǿ ƀƀƀȧȧȧřř');
+    expect(localize('CAPITAL_LETTERS')).toBe('ƇƇȦȦƤƤĪĪŦŦȦȦĿĿ_ĿĿḖḖŦŦŦŦḖḖŘŘŞŞ');
     // Everything except ASCII alphabet is passed through
     expect(localize('123,. n -~ðÞ')).toBe('123,. ƞƞ -~ðÞ');
   });
