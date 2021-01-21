@@ -2,13 +2,13 @@ import localize from './localize';
 
 describe('localize', () => {
   test('accented', () => {
-    expect(localize('abcd')).toBe('ȧȧƀƈḓ');
+    expect(localize('abcd')).toBe('ȧȧȧƀƀƀƈḓ');
     // aeou are duplicated
-    expect(localize('aeou')).toBe('ȧȧḗḗǿǿŭŭ');
-    expect(localize('foo bar')).toBe('ƒǿǿǿǿ ƀȧȧř');
-    expect(localize('CAPITAL_LETTERS')).toBe('ƇȦȦƤĪŦȦȦĿ_ĿḖḖŦŦḖḖŘŞ');
+    expect(localize('aeou')).toBe('ȧȧȧḗḗḗǿŭ');
+    expect(localize('foo bar')).toBe('ƒƒƒǿǿǿǿǿǿ ƀƀƀȧř');
+    expect(localize('CAPITAL_LETTERS')).toBe('ƇƇȦȦƤƤĪĪŦŦȦȦĿĿ_ĿḖŦŦḖŘŞ');
     // Everything except ASCII alphabet is passed through
-    expect(localize('123,. n -~ðÞ')).toBe('123,. ƞ -~ðÞ');
+    expect(localize('123,. n -~ðÞ')).toBe('123,. ƞƞ -~ðÞ');
   });
 
   test('bidi', () => {
