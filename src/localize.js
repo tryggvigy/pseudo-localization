@@ -134,40 +134,38 @@ const expansionRatio = {
   50: 1.5,
   60: 1.6,
   70: 1.6,
-  over70: 1.3 
-}
+  over70: 1.3
+};
 
-const isAlpha = (character) => {
-  return /[a-z]/.test(character)
-}
+const isAlpha = character => {
+  return /[a-zA-Z]/.test(character);
+};
 
-const textExpander = (stringLower, numDuplicateChars, expansionRatio) => {
-  let expandedText = ''
-  let count = 0
-  const repeatTimes =  Math.ceil(expansionRatio)
+const textExpander = (string, numDuplicateChars, expansionRatio) => {
+  let expandedText = '';
+  let count = 0;
+  const repeatTimes = Math.ceil(expansionRatio);
 
-  for (const c of stringLower) {
-
-    if(isAlpha(c) && count < numDuplicateChars){
+  for (const c of string) {
+    if (isAlpha(c) && count < numDuplicateChars) {
       expandedText += c.repeat(repeatTimes);
-      count+=2;
-    }
-    else{
-      expandedText += c
+      count += repeatTimes;
+    } else {
+      expandedText += c;
     }
   }
-  return expandedText
-}
+  return expandedText;
+};
 
 const textExpansionHandler = (string) => {
-  const stringLower = string.toLowerCase();
-  const strLen = string.length
-  const ratioKey = Math.ceil(strLen/10)*10
-  const ratio = ratioKey > 70? expansionRatio.over70 : expansionRatio[ratioKey]
-  const numDuplicateChars = Math.ceil(strLen*ratio) - strLen
+  const strLen = string.length;
+  const ratioKey = Math.ceil(strLen / 10) * 10;
+  const ratio =
+    ratioKey > 70 ? expansionRatio.over70 : expansionRatio[ratioKey];
+  const numDuplicateChars = Math.ceil(strLen * ratio) - strLen;
 
-  return textExpander(stringLower, numDuplicateChars, ratio)
-}
+  textExpander(string, numDuplicateChars, ratio);
+};
 
 const pseudoLocalizeString = (string, { strategy = 'accented' } = {}) => {
   let opts = strategies[strategy];
@@ -188,6 +186,7 @@ const pseudoLocalizeString = (string, { strategy = 'accented' } = {}) => {
   ) {
     return pseudoLocalizedText;
   }
+
   return opts.prefix + pseudoLocalizedText + opts.postfix;
 };
 
