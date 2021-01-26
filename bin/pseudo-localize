@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const getStdin = require('get-stdin');
-const flatten = require('flat')
-const unflatten = require('flat').unflatten
+const flatten = require('flat');
+const unflatten = require('flat').unflatten;
 
 const { localize } = require('../lib/index');
 
@@ -70,9 +70,10 @@ const convert = function(input) {
     return;
   }
 
-    // Flatten nested translation JSONs
-    input = flatten(input)
-
+  // Flatten nested translation JSONs
+  input = flatten(input, {
+    safe: true,
+  });
 
   for (let key in input) {
     // this will need to be updated if other primitives
@@ -83,7 +84,9 @@ const convert = function(input) {
   }
 
   // Retrieve initial JSON structure
-  output = unflatten(input)
+  output = unflatten(input, {
+    safe: true,
+  });
 
   write(JSON.stringify(output, null, argv.pretty ? 4 : undefined) + '\n');
 };
