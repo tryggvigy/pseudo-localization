@@ -159,10 +159,10 @@ const textExpander = (string, numDuplicateChars = 0, expansionRatio = 1) => {
   }
 
   return expandedText
-    .substring(0, maxIndex)
     .split('')
     .reverse()
-    .join('');
+    .join('')
+    .substring(0, maxIndex);
 };
 
 const textExpansionHandler = (string, toBeExpanded) => {
