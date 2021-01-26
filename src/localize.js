@@ -163,7 +163,9 @@ const textExpansionHandler = (string, toBeExpanded) => {
   const strLen = string.length;
   const ratioKey = Math.ceil(strLen / 10) * 10;
   const ratio =
-    ratioKey > 70 ? expansionRatio.over70 : expansionRatio[ratioKey];
+    ratioKey > 70
+      ? numOfCharactersInEnglishToExpansionRatioMap.over70
+      : numOfCharactersInEnglishToExpansionRatioMap[ratioKey];
   const numDuplicateChars = Math.ceil(strLen * ratio) - strLen;
 
   if (toBeExpanded) return textExpander(string, numDuplicateChars, ratio);
@@ -176,7 +178,7 @@ const pseudoLocalizeString = (string, { strategy = 'accented' } = {}) => {
 
   let pseudoLocalizedText = '';
 
-  for (let character of Expandedstring) {
+  for (let character of expandedString) {
     if (opts.map[character]) {
       pseudoLocalizedText += opts.map[character];
     } else pseudoLocalizedText += character;
