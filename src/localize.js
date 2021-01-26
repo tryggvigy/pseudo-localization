@@ -142,12 +142,14 @@ const isAlpha = character => {
 };
 
 const textExpander = (string, numDuplicateChars = 0, expansionRatio = 1) => {
+  const repeatTimes = Math.ceil(expansionRatio);
+  const reverseString = string.split('').reverse();
+
   let expandedText = '';
   let count = 0;
-  const repeatTimes = Math.ceil(expansionRatio);
   let maxIndex = numDuplicateChars + string.length;
 
-  for (const c of string) {
+  for (const c of reverseString) {
     if (isAlpha(c) && count < numDuplicateChars) {
       expandedText += c.repeat(repeatTimes);
       count += repeatTimes - 1;
@@ -156,7 +158,11 @@ const textExpander = (string, numDuplicateChars = 0, expansionRatio = 1) => {
     }
   }
 
-  return expandedText.substring(0, maxIndex);
+  return expandedText
+    .substring(0, maxIndex)
+    .split('')
+    .reverse()
+    .join('');
 };
 
 const textExpansionHandler = (string, toBeExpanded) => {

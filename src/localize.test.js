@@ -2,10 +2,10 @@ import localize from './localize';
 
 describe('localize', () => {
   test('accented', () => {
-    expect(localize('abcd')).toBe('ȧȧȧƀƀƀƈƈƈḓ');
+    expect(localize('abcd')).toBe('ȧƀƀƀƈƈƈḓḓḓ');
     // aeou are duplicated
-    expect(localize('aeou')).toBe('ȧȧȧḗḗḗǿǿǿŭ');
-    expect(localize('foo bar')).toBe('ƒƒƒǿǿǿǿǿǿ ƀƀƀȧȧȧřř');
+    expect(localize('aeou')).toBe('ȧḗḗḗǿǿǿŭŭŭ');
+    expect(localize('foo bar')).toBe('ƒƒǿǿǿǿǿǿ ƀƀƀȧȧȧřřř');
     expect(localize('CAPITAL_LETTERS')).toBe('ƇƇȦȦƤƤĪĪŦŦȦȦĿĿ_ĿĿḖḖŦŦŦŦḖḖŘŘŞŞ');
     // Everything except ASCII alphabet is passed through
     expect(localize('123,. n -~ðÞ')).toBe('123,. ƞƞ -~ðÞ');
