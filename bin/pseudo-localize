@@ -64,10 +64,10 @@ const convert = function(input) {
   const options = { strategy: argv.strategy };
 
   if (typeof input === 'string') {
-    write(localize(input, options));
+    write(localize(input, options) +'\n');
     return;
   }
-
+ 
   for (let key in input) {
     // this will need to be updated if other primitives
     // support pseudo-localization
@@ -85,7 +85,7 @@ const convert = function(input) {
   let json = null;
 
   if (argv.i) {
-    convert(argv.i + '\n');
+    convert(argv.i);
     return;
   }
 
