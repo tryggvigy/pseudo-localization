@@ -172,7 +172,7 @@ const textExpansionHandler = (string, toBeExpanded) => {
 
 const pseudoLocalizeString = (string, { strategy = 'accented' } = {}) => {
   let opts = strategies[strategy];
-  let Expandedstring = textExpansionHandler(string, opts.elongate);
+  let expandedString = textExpansionHandler(string, opts.elongate);
 
   let pseudoLocalizedText = '';
 
