@@ -126,7 +126,7 @@ const strategies = {
 };
 
 // Reference for ratios https://www.w3.org/International/articles/article-text-size
-const expansionRatio = {
+const numOfCharactersInEnglishToExpansionRatioMap = {
   10: 2.5,
   20: 1.9,
   30: 1.7,
