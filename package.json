@@ -43,6 +43,7 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
+    "flat": "^5.0.2",
     "get-stdin": "^7.0.0",
     "yargs": "^13.3.0"
   }
