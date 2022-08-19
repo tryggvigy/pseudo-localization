@@ -38,8 +38,13 @@ import pseudoLocalization from 'pseudo-localization';
 
 pseudoLocalization.start();
 
+pseudoLocalization.isEnabled() // true
+
 // Later, if needed
 pseudoLocalization.stop();
+
+pseudoLocalization.isEnabled() // false
+
 ```
 
 To use `pseudo-localization` in React, Vue, Ember or anything else, hook the `start` and `stop` methods into your libraries

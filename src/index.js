@@ -12,6 +12,9 @@ const pseudoLocalization = (() => {
     blacklistedNodeNames: ['STYLE'],
   };
 
+  // Indicates whether the pseudo-localization is currently enabled.
+  let enabled = false;
+
   // Observer for dom updates. Initialization is defered to make parts
   // of the API safe to use in non-browser environments like nodejs
   let observer = null;
@@ -84,10 +87,19 @@ const pseudoLocalization = (() => {
     }
   };
 
+  const isEnabled = () => {
+    return enabled;
+  }
+
   const start = ({
     strategy = 'accented',
     blacklistedNodeNames = opts.blacklistedNodeNames,
   } = {}) => {
+    if (isEnabled()) {
+      console.error('pseudo-localization is already enabled');
+      return;
+    }
+
     opts.blacklistedNodeNames = blacklistedNodeNames;
     opts.strategy = strategy;
     // Pseudo localize the DOM
@@ -96,15 +108,23 @@ const pseudoLocalization = (() => {
     // pseudo localization on any added text nodes
     observer = new MutationObserver(domMutationCallback);
     observer.observe(document.body, observerConfig);
+    enabled = true;
   };
 
   const stop = () => {
+    if (!isEnabled()) {
+      console.error('pseudo-localization is already disabled');
+      return;
+    }
+
     observer && observer.disconnect();
+    enabled = false;
   };
 
   return {
     start,
     stop,
+    isEnabled,
     localize: pseudoLocalizeString,
   };
 })();
