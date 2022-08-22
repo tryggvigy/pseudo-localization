@@ -1,3 +1,7 @@
+## 2.4.0
+
+Add Typescript support.
+
 ##2.3.5
 
 - Add isEnabled boolean to `pseudo-localization`
