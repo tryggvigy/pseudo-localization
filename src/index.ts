@@ -1,4 +1,6 @@
-import pseudoLocalizeString from './localize.js';
+import pseudoLocalizeString, {
+  PseudoLocalizeStringOptions,
+} from './localize.js';
 
 /**
  * export the underlying pseudo localization function so this import style
@@ -7,9 +9,20 @@ import pseudoLocalizeString from './localize.js';
  */
 export { default as localize } from './localize.js';
 
+type MutationObserverCallbackOptions = {
+  blacklistedNodeNames?: string[];
+};
+
+type StartOptions = MutationObserverCallbackOptions &
+  PseudoLocalizeStringOptions;
+
 const pseudoLocalization = (() => {
-  const opts = {
+  const mutationObserverOpts = {
     blacklistedNodeNames: ['STYLE'],
+  };
+
+  const opts: PseudoLocalizeStringOptions = {
+    strategy: 'accented',
   };
 
   // Indicates whether the pseudo-localization is currently enabled.
@@ -17,25 +30,31 @@ const pseudoLocalization = (() => {
 
   // Observer for dom updates. Initialization is defered to make parts
   // of the API safe to use in non-browser environments like nodejs
-  let observer = null;
+  let observer: MutationObserver | null = null;
   const observerConfig = {
     characterData: true,
     childList: true,
     subtree: true,
   };
 
-  const textNodesUnder = element => {
+  const textNodesUnder = (element: Node) => {
     const walker = document.createTreeWalker(
       element,
       NodeFilter.SHOW_TEXT,
       node => {
-        const isAllWhitespace = !/[^\s]/.test(node.nodeValue);
-        if (isAllWhitespace) return NodeFilter.FILTER_REJECT;
+        const isAllWhitespace = node.nodeValue && !/[^\s]/.test(node.nodeValue);
+        if (isAllWhitespace) {
+          return NodeFilter.FILTER_REJECT;
+        }
 
-        const isBlacklistedNode = opts.blacklistedNodeNames.includes(
-          node.parentElement.nodeName
-        );
-        if (isBlacklistedNode) return NodeFilter.FILTER_REJECT;
+        const isBlacklistedNode =
+          node.parentElement &&
+          mutationObserverOpts.blacklistedNodeNames.includes(
+            node.parentElement.nodeName
+          );
+        if (isBlacklistedNode) {
+          return NodeFilter.FILTER_REJECT;
+        }
 
         return NodeFilter.FILTER_ACCEPT;
       }
@@ -47,9 +66,10 @@ const pseudoLocalization = (() => {
     return textNodes;
   };
 
-  const isNonEmptyString = str => str && typeof str === 'string';
+  const isNonEmptyString = (str: unknown): str is string =>
+    !!str && typeof str === 'string';
 
-  const pseudoLocalize = element => {
+  const pseudoLocalize = (element: Node) => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
       const nodeValue = textNode.nodeValue;
@@ -59,7 +79,10 @@ const pseudoLocalization = (() => {
     }
   };
 
-  const domMutationCallback = mutationsList => {
+  const domMutationCallback: MutationCallback = mutationsList => {
+    if (!observer) {
+      return;
+    }
     for (let mutation of mutationsList) {
       if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
         // Turn the observer off while performing dom manipulation to prevent
@@ -71,9 +94,11 @@ const pseudoLocalization = (() => {
         observer.observe(document.body, observerConfig);
       } else if (mutation.type === 'characterData') {
         const nodeValue = mutation.target.nodeValue;
-        const isBlacklistedNode = opts.blacklistedNodeNames.includes(
-          mutation.target.parentElement.nodeName
-        );
+        const isBlacklistedNode =
+          !!mutation.target.parentElement &&
+          mutationObserverOpts.blacklistedNodeNames.includes(
+            mutation.target.parentElement.nodeName
+          );
         if (isNonEmptyString(nodeValue) && !isBlacklistedNode) {
           // Turn the observer off while performing dom manipulation to prevent
           // infinite dom mutation callback loops
@@ -89,18 +114,18 @@ const pseudoLocalization = (() => {
 
   const isEnabled = () => {
     return enabled;
-  }
+  };
 
   const start = ({
     strategy = 'accented',
-    blacklistedNodeNames = opts.blacklistedNodeNames,
-  } = {}) => {
+    blacklistedNodeNames = mutationObserverOpts.blacklistedNodeNames,
+  }: StartOptions = {}) => {
     if (isEnabled()) {
       console.error('pseudo-localization is already enabled');
       return;
     }
 
-    opts.blacklistedNodeNames = blacklistedNodeNames;
+    mutationObserverOpts.blacklistedNodeNames = blacklistedNodeNames;
     opts.strategy = strategy;
     // Pseudo localize the DOM
     pseudoLocalize(document.body);

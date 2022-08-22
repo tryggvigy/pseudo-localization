@@ -6,7 +6,7 @@ const getStdin = require('get-stdin');
 const flatten = require('flat');
 const unflatten = require('flat').unflatten;
 
-const { localize } = require('../lib/index');
+const { localize } = require('../dist/cjs/index');
 
 const argv = require('yargs')
   .usage(
