@@ -1,10 +1,10 @@
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
-var path = require('path');
-var baseDirectory = __dirname;
+import http from 'http'
+import url  from 'url'
+import fs from 'fs'
+import path from 'path'
 
-var port = 8080;
+const port = 8080;
+const baseDirectory = url.fileURLToPath(new URL('.', import.meta.url));
 
 http
   .createServer(function(request, response) {
@@ -12,7 +12,9 @@ http
       var requestUrl = url.parse(request.url);
 
       // need to use path.normalize so people can't access directories underneath baseDirectory
-      var fsPath = baseDirectory + path.normalize(requestUrl.pathname);
+      var fsPath = path.join(baseDirectory, path.normalize(requestUrl.pathname));
+
+      console.log(fsPath);
 
       // Force correct content-type for JavaScript
       // This is a work-around for an issue where
