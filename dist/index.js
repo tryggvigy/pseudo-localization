@@ -84,13 +84,14 @@ const pseudoLocalization = (() => {
     const isEnabled = () => {
         return enabled;
     };
-    const start = ({ strategy = 'accented', blacklistedNodeNames = mutationObserverOpts.blacklistedNodeNames, } = {}) => {
+    const start = ({ strategy = 'accented', extendParams, blacklistedNodeNames = mutationObserverOpts.blacklistedNodeNames, } = {}) => {
         if (isEnabled()) {
             console.error('pseudo-localization is already enabled');
             return;
         }
         mutationObserverOpts.blacklistedNodeNames = blacklistedNodeNames;
         opts.strategy = strategy;
+        opts.extendParams = extendParams;
         // Pseudo localize the DOM
         pseudoLocalize(document.body);
         // Start observing the DOM for changes and run
