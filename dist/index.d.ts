@@ -10,10 +10,10 @@ declare type MutationObserverCallbackOptions = {
 };
 declare type StartOptions = MutationObserverCallbackOptions & PseudoLocalizeStringOptions;
 declare const pseudoLocalization: {
-    start: ({ strategy, blacklistedNodeNames, }?: StartOptions) => void;
+    start: ({ strategy, extendParams, blacklistedNodeNames, }?: StartOptions) => void;
     stop: () => void;
     isEnabled: () => boolean;
-    localize: (string: string, { strategy }?: PseudoLocalizeStringOptions) => string;
+    localize: (string: string, options?: PseudoLocalizeStringOptions) => string;
 };
 export default pseudoLocalization;
 //# sourceMappingURL=index.d.ts.map
