@@ -1,27 +1,27 @@
-import pseudoLocalizeString, {
-  PseudoLocalizeStringOptions,
-} from './localize.js';
+import { pseudoLocalizeString } from './localize.mjs';
 
 /**
- * export the underlying pseudo localization function so this import style
- *  import { localize } from 'pseudo-localization';
- * can be used.
+ * @typedef {import("./localize.mjs").PseudoLocalizeStringOptions} PseudoLocalizeStringOptions
  */
-export { default as localize } from './localize.js';
 
-type MutationObserverCallbackOptions = {
-  blacklistedNodeNames?: string[];
-};
+/**
+ * @typedef {Object} MutationObserverCallbackOptions
+ * @property {string[]} [blacklistedNodeNames]
+ */
 
-type StartOptions = MutationObserverCallbackOptions &
-  PseudoLocalizeStringOptions;
+/**
+ * @typedef {MutationObserverCallbackOptions & PseudoLocalizeStringOptions} StartOptions
+ */
 
-const pseudoLocalization = (() => {
+const pseudoLocalizationDom = (() => {
   const mutationObserverOpts = {
     blacklistedNodeNames: ['STYLE'],
   };
 
-  const opts: PseudoLocalizeStringOptions = {
+  /**
+   * @type {PseudoLocalizeStringOptions}
+   */
+  const opts = {
     strategy: 'accented',
   };
 
@@ -30,18 +30,24 @@ const pseudoLocalization = (() => {
 
   // Observer for dom updates. Initialization is defered to make parts
   // of the API safe to use in non-browser environments like nodejs
-  let observer: MutationObserver | null = null;
+  /**
+   * @type {MutationObserver | null}
+   */
+  let observer = null;
   const observerConfig = {
     characterData: true,
     childList: true,
     subtree: true,
   };
 
-  const textNodesUnder = (element: Node) => {
+  /**
+   * @param {Node} element
+   */
+  const textNodesUnder = (element) => {
     const walker = document.createTreeWalker(
       element,
       NodeFilter.SHOW_TEXT,
-      node => {
+      (node) => {
         const isAllWhitespace = node.nodeValue && !/[^\s]/.test(node.nodeValue);
         if (isAllWhitespace) {
           return NodeFilter.FILTER_REJECT;
@@ -66,10 +72,17 @@ const pseudoLocalization = (() => {
     return textNodes;
   };
 
-  const isNonEmptyString = (str: unknown): str is string =>
-    !!str && typeof str === 'string';
+  /**
+   * Checks if the given value is a non-empty string.
+   * @param {unknown} str - The value to check.
+   * @returns {str is string} `true` if the value is a non-empty string, otherwise `false`.
+   */
+  const isNonEmptyString = (str) => !!str && typeof str === 'string';
 
-  const pseudoLocalize = (element: Node) => {
+  /**
+   * @param {Node} element
+   */
+  const pseudoLocalize = (element) => {
     const textNodesUnderElement = textNodesUnder(element);
     for (let textNode of textNodesUnderElement) {
       const nodeValue = textNode.nodeValue;
@@ -79,7 +92,10 @@ const pseudoLocalization = (() => {
     }
   };
 
-  const domMutationCallback: MutationCallback = mutationsList => {
+  /**
+   * @type {MutationCallback}
+   */
+  const domMutationCallback = (mutationsList) => {
     if (!observer) {
       return;
     }
@@ -116,10 +132,14 @@ const pseudoLocalization = (() => {
     return enabled;
   };
 
+  /**
+   *
+   * @param {StartOptions} options
+   */
   const start = ({
     strategy = 'accented',
     blacklistedNodeNames = mutationObserverOpts.blacklistedNodeNames,
-  }: StartOptions = {}) => {
+  } = {}) => {
     if (isEnabled()) {
       console.error('pseudo-localization is already enabled');
       return;
@@ -141,8 +161,7 @@ const pseudoLocalization = (() => {
       console.error('pseudo-localization is already disabled');
       return;
     }
-
-    observer && observer.disconnect();
+    observer?.disconnect();
     enabled = false;
   };
 
@@ -150,8 +169,7 @@ const pseudoLocalization = (() => {
     start,
     stop,
     isEnabled,
-    localize: pseudoLocalizeString,
   };
 })();
 
-export default pseudoLocalization;
+export default pseudoLocalizationDom;

@@ -6,13 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Pseudo Localized Hamlet</title>
     <script type="module"  defer="defer">
-      import pseudoLocalization, { localize } from './dist/index.js';
+      import pseudoLocalization from './src/dom.mjs';
+      import { pseudoLocalizeString } from './src/localize.mjs';
+
       pseudoLocalization.start({
         strategy: 'accented',
         blacklistedNodeNames: ['STYLE', 'text', 'PRE'],
       });
 
-      console.log(localize('Some Localized String'));
+      console.log(pseudoLocalizeString('Some Localized String'));
     </script>
   </head>
   <body>
