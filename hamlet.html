@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Pseudo Localized Hamlet</title>
     <script type="module"  defer="defer">
-      import pseudoLocalization from './src/dom.mjs';
+      import { PseudoLocalizeDom } from './src/dom.mjs';
       import { pseudoLocalizeString } from './src/localize.mjs';
 
-      pseudoLocalization.start({
+      new PseudoLocalizeDom().start({
         strategy: 'accented',
         blacklistedNodeNames: ['STYLE', 'text', 'PRE'],
       });

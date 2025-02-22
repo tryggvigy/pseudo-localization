@@ -1,175 +1,165 @@
 import { pseudoLocalizeString } from './localize.mjs';
 
 /**
+ * Checks if the given value is a non-empty string.
+ * @param {unknown} str - The value to check.
+ * @returns {str is string} `true` if the value is a non-empty string, otherwise `false`.
+ */
+function isNonEmptyString(str) {
+  return !!str && typeof str === 'string';
+}
+
+/**
  * @typedef {import("./localize.mjs").PseudoLocalizeStringOptions} PseudoLocalizeStringOptions
  */
 
 /**
- * @typedef {Object} MutationObserverCallbackOptions
+ * @typedef {Object} StartOnlyOptions
  * @property {string[]} [blacklistedNodeNames]
+ * Node tags to ignore in pseudo-localization
+ * @property {Node} [element]
+ * The element to pseudo-localize text within.
+ * Default: `document.body`
  */
 
 /**
- * @typedef {MutationObserverCallbackOptions & PseudoLocalizeStringOptions} StartOptions
+ * @typedef {StartOnlyOptions & PseudoLocalizeStringOptions} StartOptions
  */
 
-const pseudoLocalizationDom = (() => {
-  const mutationObserverOpts = {
-    blacklistedNodeNames: ['STYLE'],
-  };
+/**
+ * A container for pseudo-localization of the DOM.
+ *
+ * @example
+ * new PseudoLocalizeDom().start();
+ */
+export class PseudoLocalizeDom {
+  /**
+   * Indicates which elements the pseudo-localization is currently running on.
+   *
+   * @type {WeakSet<Node>}
+   */
+  #enabledOn = new WeakSet();
 
   /**
-   * @type {PseudoLocalizeStringOptions}
+   * @param {StartOptions} options
+   * @returns {() => void} stop
    */
-  const opts = {
-    strategy: 'accented',
-  };
+  start({
+    strategy = 'accented',
+    blacklistedNodeNames = ['STYLE'],
+    element,
+  } = {}) {
+    let elem = element ?? document.body;
 
-  // Indicates whether the pseudo-localization is currently enabled.
-  let enabled = false;
-
-  // Observer for dom updates. Initialization is defered to make parts
-  // of the API safe to use in non-browser environments like nodejs
-  /**
-   * @type {MutationObserver | null}
-   */
-  let observer = null;
-  const observerConfig = {
-    characterData: true,
-    childList: true,
-    subtree: true,
-  };
-
-  /**
-   * @param {Node} element
-   */
-  const textNodesUnder = (element) => {
-    const walker = document.createTreeWalker(
-      element,
-      NodeFilter.SHOW_TEXT,
-      (node) => {
-        const isAllWhitespace = node.nodeValue && !/[^\s]/.test(node.nodeValue);
-        if (isAllWhitespace) {
-          return NodeFilter.FILTER_REJECT;
-        }
-
-        const isBlacklistedNode =
-          node.parentElement &&
-          mutationObserverOpts.blacklistedNodeNames.includes(
-            node.parentElement.nodeName
-          );
-        if (isBlacklistedNode) {
-          return NodeFilter.FILTER_REJECT;
-        }
-
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    );
-
-    let currNode;
-    const textNodes = [];
-    while ((currNode = walker.nextNode())) textNodes.push(currNode);
-    return textNodes;
-  };
-
-  /**
-   * Checks if the given value is a non-empty string.
-   * @param {unknown} str - The value to check.
-   * @returns {str is string} `true` if the value is a non-empty string, otherwise `false`.
-   */
-  const isNonEmptyString = (str) => !!str && typeof str === 'string';
-
-  /**
-   * @param {Node} element
-   */
-  const pseudoLocalize = (element) => {
-    const textNodesUnderElement = textNodesUnder(element);
-    for (let textNode of textNodesUnderElement) {
-      const nodeValue = textNode.nodeValue;
-      if (isNonEmptyString(nodeValue)) {
-        textNode.nodeValue = pseudoLocalizeString(nodeValue, opts);
-      }
+    if (this.#enabledOn.has(elem)) {
+      console.warn(
+        `Start aborted. pseudo-localization is already enabled on`,
+        elem
+      );
+      return () => {};
     }
-  };
 
-  /**
-   * @type {MutationCallback}
-   */
-  const domMutationCallback = (mutationsList) => {
-    if (!observer) {
-      return;
-    }
-    for (let mutation of mutationsList) {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        // Turn the observer off while performing dom manipulation to prevent
-        // infinite dom mutation callback loops
-        observer.disconnect();
-        // For every node added, recurse down it's subtree and convert
-        // all children as well
-        mutation.addedNodes.forEach(pseudoLocalize);
-        observer.observe(document.body, observerConfig);
-      } else if (mutation.type === 'characterData') {
-        const nodeValue = mutation.target.nodeValue;
-        const isBlacklistedNode =
-          !!mutation.target.parentElement &&
-          mutationObserverOpts.blacklistedNodeNames.includes(
-            mutation.target.parentElement.nodeName
-          );
-        if (isNonEmptyString(nodeValue) && !isBlacklistedNode) {
+    const observerConfig = {
+      characterData: true,
+      childList: true,
+      subtree: true,
+    };
+
+    /**
+     * @param {Node} node
+     */
+    const textNodesUnder = (node) => {
+      const walker = document.createTreeWalker(
+        node,
+        NodeFilter.SHOW_TEXT,
+        (node) => {
+          const isAllWhitespace =
+            node.nodeValue && !/[^\s]/.test(node.nodeValue);
+          if (isAllWhitespace) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          const isBlacklistedNode =
+            node.parentElement &&
+            blacklistedNodeNames.includes(node.parentElement.nodeName);
+          if (isBlacklistedNode) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      );
+
+      let currNode;
+      const textNodes = [];
+      while ((currNode = walker.nextNode())) textNodes.push(currNode);
+      return textNodes;
+    };
+
+    /**
+     * @param {Node} element
+     */
+    const pseudoLocalize = (element) => {
+      const textNodesUnderElement = textNodesUnder(element);
+      for (let textNode of textNodesUnderElement) {
+        const nodeValue = textNode.nodeValue;
+        if (isNonEmptyString(nodeValue)) {
+          textNode.nodeValue = pseudoLocalizeString(nodeValue, { strategy });
+        }
+      }
+    };
+
+    // Pseudo localize the DOM
+    pseudoLocalize(document.body);
+
+    // Start observing the DOM for changes and run
+    // pseudo localization on any added text nodes
+    const observer = new MutationObserver((mutationsList) => {
+      for (let mutation of mutationsList) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
           // Turn the observer off while performing dom manipulation to prevent
           // infinite dom mutation callback loops
           observer.disconnect();
-          // The target will always be a text node so it can be converted
-          // directly
-          mutation.target.nodeValue = pseudoLocalizeString(nodeValue, opts);
+          // For every node added, recurse down it's subtree and convert
+          // all children as well
+          mutation.addedNodes.forEach(pseudoLocalize.bind(this));
           observer.observe(document.body, observerConfig);
+        } else if (mutation.type === 'characterData') {
+          const nodeValue = mutation.target.nodeValue;
+          const isBlacklistedNode =
+            !!mutation.target.parentElement &&
+            blacklistedNodeNames.includes(
+              mutation.target.parentElement.nodeName
+            );
+          if (isNonEmptyString(nodeValue) && !isBlacklistedNode) {
+            // Turn the observer off while performing dom manipulation to prevent
+            // infinite dom mutation callback loops
+            observer.disconnect();
+            // The target will always be a text node so it can be converted
+            // directly
+            mutation.target.nodeValue = pseudoLocalizeString(nodeValue, {
+              strategy,
+            });
+            observer.observe(document.body, observerConfig);
+          }
         }
       }
-    }
-  };
+    });
 
-  const isEnabled = () => {
-    return enabled;
-  };
-
-  /**
-   *
-   * @param {StartOptions} options
-   */
-  const start = ({
-    strategy = 'accented',
-    blacklistedNodeNames = mutationObserverOpts.blacklistedNodeNames,
-  } = {}) => {
-    if (isEnabled()) {
-      console.error('pseudo-localization is already enabled');
-      return;
-    }
-
-    mutationObserverOpts.blacklistedNodeNames = blacklistedNodeNames;
-    opts.strategy = strategy;
-    // Pseudo localize the DOM
-    pseudoLocalize(document.body);
-    // Start observing the DOM for changes and run
-    // pseudo localization on any added text nodes
-    observer = new MutationObserver(domMutationCallback);
     observer.observe(document.body, observerConfig);
-    enabled = true;
-  };
+    this.#enabledOn.add(elem);
 
-  const stop = () => {
-    if (!isEnabled()) {
-      console.error('pseudo-localization is already disabled');
-      return;
-    }
-    observer?.disconnect();
-    enabled = false;
-  };
-
-  return {
-    start,
-    stop,
-    isEnabled,
-  };
-})();
-
-export default pseudoLocalizationDom;
+    const stop = () => {
+      if (!this.#enabledOn.has(elem)) {
+        console.warn(
+          'Stop aborted. pseudo-localization is not running on',
+          elem
+        );
+        return;
+      }
+      observer.disconnect();
+      this.#enabledOn.delete(elem);
+    };
+    return stop;
+  }
+}

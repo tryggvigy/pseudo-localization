@@ -1,10 +1,11 @@
 {
   "name": "pseudo-localization",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "pseudo-localization for internationalization testing",
   "files": [
-    "dist",
-    "bin"
+    "bin",
+    "src/localize.mjs",
+    "src/dom.mjs"
   ],
   "main": "./src/localize.mjs",
   "type": "module",
@@ -12,22 +13,22 @@
     ".": {
       "import": "./src/localize.mjs"
     },
-    "dom": {
+    "./dom": {
       "import": "./src/dom.mjs"
     }
   },
   "bin": {
-    "pseudo-localization": "bin/pseudo-localize.mjs"
+    "pseudo-localization": "./bin/pseudo-localize.mjs"
   },
   "engines": {
     "node": "^23"
   },
   "scripts": {
     "start": "node devserver.mjs",
-    "check-formatting": "prettier --list-different src/**/*.ts",
-    "format": "prettier --write src/**/*.ts",
-    "lint": "eslint src/**/*.js",
-    "test-js": "jest src/*",
+    "check-formatting": "prettier --list-different src/**/*.mjs",
+    "format": "prettier --write src/**/*.mjs",
+    "lint": "eslint src/**/*.mjs",
+    "test-js": "node ./src/localize.test.mjs",
     "test": "npm run test-js jest && npm run check-formatting && npm run check-types && npm run lint",
     "check-types": "tsc --noEmit",
     "tsc": "tsc"
