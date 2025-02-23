@@ -17,7 +17,7 @@ function isNonEmptyString(str) {
  * @typedef {Object} StartOnlyOptions
  * @property {string[]} [blacklistedNodeNames]
  * Node tags to ignore in pseudo-localization
- * @property {Node} [element]
+ * @property {Node} [root]
  * The element to pseudo-localize text within.
  * Default: `document.body`
  */
@@ -47,14 +47,14 @@ export class PseudoLocalizeDom {
   start({
     strategy = 'accented',
     blacklistedNodeNames = ['STYLE'],
-    element,
+    root,
   } = {}) {
-    let elem = element ?? document.body;
+    let rootEl = root ?? document.body;
 
-    if (this.#enabledOn.has(elem)) {
+    if (this.#enabledOn.has(rootEl)) {
       console.warn(
         `Start aborted. pseudo-localization is already enabled on`,
-        elem
+        rootEl
       );
       return () => {};
     }
@@ -147,18 +147,18 @@ export class PseudoLocalizeDom {
     });
 
     observer.observe(document.body, observerConfig);
-    this.#enabledOn.add(elem);
+    this.#enabledOn.add(rootEl);
 
     const stop = () => {
-      if (!this.#enabledOn.has(elem)) {
+      if (!this.#enabledOn.has(rootEl)) {
         console.warn(
           'Stop aborted. pseudo-localization is not running on',
-          elem
+          rootEl
         );
         return;
       }
       observer.disconnect();
-      this.#enabledOn.delete(elem);
+      this.#enabledOn.delete(rootEl);
     };
     return stop;
   }
