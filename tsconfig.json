@@ -1,26 +1,20 @@
 {
-    // Change this to match your project
-    "include": ["src/**/*"],
-    "compilerOptions": {
-      "target": "ES6",
-      "skipLibCheck": true,
-      // Generate d.ts files
-      "declaration": true,
-      // Types should go into this directory.
-      // Removing this would place the .d.ts files
-      // next to the .js files
-      "outDir": "dist",
-      // go to js file when using IDE functions like
-      // "Go to Definition" in VSCode
-      "declarationMap": true,
-      // Ensure that Babel can safely transpile files in the TypeScript project
-      "isolatedModules": true,
-      "noImplicitAny": true,
-      "strictNullChecks": true,
-      "strictFunctionTypes": true,
-      "strictBindCallApply": true,
-      "strictPropertyInitialization": true,
-      "noImplicitThis": true,
-      "alwaysStrict": true
-    }
+  "include": ["src"],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "allowJs": true,
+    "checkJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "module": "preserve",
+    "noEmit": true,
+    "lib": ["es2022", "dom", "dom.iterable"]
+  }
 }
