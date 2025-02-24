@@ -2,7 +2,7 @@
 
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import { pseudoLocalizeString } from '../src/localize.mjs';
+import { pseudoLocalizeString } from '../localize.ts';
 
 yargs(hideBin(process.argv))
   .usage(
@@ -13,13 +13,14 @@ yargs(hideBin(process.argv))
         .positional('string', {
           describe: 'String to pseudo-localize',
           type: 'string',
+          demandOption: true,
         })
         .option('strategy', {
           alias: 's',
           type: 'string',
           describe: 'Set the strategy for localization',
-          choices: ['accented', 'bidi'],
-          default: 'accented',
+          choices: ['accented', 'bidi'] as const,
+          default: 'accented' as const,
         });
     },
     ({ string, strategy }) => {
@@ -27,5 +28,4 @@ yargs(hideBin(process.argv))
     }
   )
   .help()
-  .version()
   .parse();

@@ -1,30 +1,28 @@
-import { pseudoLocalizeString } from './localize.mjs';
+import {
+  pseudoLocalizeString,
+  type PseudoLocalizeStringOptions,
+} from './localize.ts';
 
-/**
- * Checks if the given value is a non-empty string.
- * @param {unknown} str - The value to check.
- * @returns {str is string} `true` if the value is a non-empty string, otherwise `false`.
- */
-function isNonEmptyString(str) {
+function isNonEmptyString(str: string | null | undefined): str is string {
   return !!str && typeof str === 'string';
 }
 
-/**
- * @typedef {import("./localize.mjs").PseudoLocalizeStringOptions} PseudoLocalizeStringOptions
- */
+type StartOptions = PseudoLocalizeStringOptions & {
+  /**
+   * Node tags to ignore in pseudo-localization.
+   *
+   * @default ['STYLE']
+   */
+  blacklistedNodeNames?: string[];
+  /**
+   * The element to pseudo-localize text within.
+   *
+   * @default document.body
+   */
+  root?: Node;
+};
 
-/**
- * @typedef {Object} StartOnlyOptions
- * @property {string[]} [blacklistedNodeNames]
- * Node tags to ignore in pseudo-localization
- * @property {Node} [root]
- * The element to pseudo-localize text within.
- * Default: `document.body`
- */
-
-/**
- * @typedef {StartOnlyOptions & PseudoLocalizeStringOptions} StartOptions
- */
+type StopFn = () => void;
 
 /**
  * A container for pseudo-localization of the DOM.
@@ -35,21 +33,20 @@ function isNonEmptyString(str) {
 export class PseudoLocalizeDom {
   /**
    * Indicates which elements the pseudo-localization is currently running on.
-   *
-   * @type {WeakSet<Node>}
    */
-  #enabledOn = new WeakSet();
+  #enabledOn = new WeakSet<Node>();
 
   /**
-   * @param {StartOptions} options
-   * @returns {() => void} stop
+   * Start pseudo-localizing the DOM.
+   *
+   * Returns a stop function to disable pseudo-localization.
    */
   start({
     strategy = 'accented',
     blacklistedNodeNames = ['STYLE'],
     root,
-  } = {}) {
-    let rootEl = root ?? document.body;
+  }: StartOptions = {}): StopFn {
+    const rootEl = root ?? document.body;
 
     if (this.#enabledOn.has(rootEl)) {
       console.warn(
@@ -65,10 +62,7 @@ export class PseudoLocalizeDom {
       subtree: true,
     };
 
-    /**
-     * @param {Node} node
-     */
-    const textNodesUnder = (node) => {
+    const textNodesUnder = (node: Node) => {
       const walker = document.createTreeWalker(
         node,
         NodeFilter.SHOW_TEXT,
@@ -96,12 +90,9 @@ export class PseudoLocalizeDom {
       return textNodes;
     };
 
-    /**
-     * @param {Node} element
-     */
-    const pseudoLocalize = (element) => {
-      const textNodesUnderElement = textNodesUnder(element);
-      for (let textNode of textNodesUnderElement) {
+    const pseudoLocalize = (node: Node) => {
+      const textNodesUnderElement = textNodesUnder(node);
+      for (const textNode of textNodesUnderElement) {
         const nodeValue = textNode.nodeValue;
         if (isNonEmptyString(nodeValue)) {
           textNode.nodeValue = pseudoLocalizeString(nodeValue, { strategy });
@@ -115,7 +106,7 @@ export class PseudoLocalizeDom {
     // Start observing the DOM for changes and run
     // pseudo localization on any added text nodes
     const observer = new MutationObserver((mutationsList) => {
-      for (let mutation of mutationsList) {
+      for (const mutation of mutationsList) {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
           // Turn the observer off while performing dom manipulation to prevent
           // infinite dom mutation callback loops
