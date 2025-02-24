@@ -1,6 +1,6 @@
 {
   "name": "pseudo-localization",
-  "version": "3.1.5",
+  "version": "3.1.0",
   "description": "pseudo-localization for internationalization testing",
   "files": [
     "dist",
