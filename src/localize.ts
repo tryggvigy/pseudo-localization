@@ -35,9 +35,9 @@ const strategies = {
   },
 };
 
-type Strategy = 'accented' | 'bidi';
+export type Strategy = 'accented' | 'bidi';
 
-type PseudoLocalizeStringOptions = {
+export type PseudoLocalizeStringOptions = {
   /**
    * The strategy to employ.
    * - `accented`:
@@ -67,7 +67,7 @@ type PseudoLocalizeStringOptions = {
 export const pseudoLocalizeString = (
   string: string,
   { strategy = 'accented' }: PseudoLocalizeStringOptions = {}
-) => {
+): string => {
   const opts = strategies[strategy];
 
   let pseudoLocalizedText = '';
