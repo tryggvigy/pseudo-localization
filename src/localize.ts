@@ -35,41 +35,45 @@ const strategies = {
   },
 };
 
-/**
- * @typedef {'accented' | 'bidi'} Strategy
- */
+type Strategy = 'accented' | 'bidi';
 
-/**
- * @typedef {Object} PseudoLocalizeStringOptions
- * @property {Strategy} [strategy] The strategy to employ.
- * - `accented`: In Accented English all Latin letters are replaced by accented
- * Unicode counterparts which don't impair the readability of the content.
- * This allows developers to quickly test if any given string is being
- * correctly displayed in its 'translated' form.  Additionally, simple
- * heuristics are used to make certain words longer to better simulate the
- * experience of international users.
- * - `bidi`: Bidi English is a fake [RTL](https://developer.mozilla.org/en-US/docs/Glossary/rtl) locale.  All words are surrounded by
-Unicode formatting marks forcing the RTL directionality of characters.
-In addition, to make the reversed text easier to read, individual
-letters are flipped.
- */
+type PseudoLocalizeStringOptions = {
+  /**
+   * The strategy to employ.
+   * - `accented`:
+   *   In Accented English all Latin letters are replaced by accented
+   *   Unicode counterparts which don't impair the readability of the content.
+   *   This allows developers to quickly test if any given string is being
+   *   correctly displayed in its 'translated' form.  Additionally, simple
+   *   heuristics are used to make certain words longer to better simulate the
+   * experience of international users.
+   * - `bidi`:
+   *  Bidi English is a fake [RTL](https://developer.mozilla.org/en-US/docs/Glossary/rtl) locale.
+   *  All words are surrounded by
+   *  Unicode formatting marks forcing the RTL directionality of characters.
+   *  In addition, to make the reversed text easier to read, individual
+   *  letters are flipped.
+   */
+  strategy?: Strategy;
+};
 
 /**
  * Pseudo-localizes a string using a specified strategy.
- * @param {string} string - The string to pseudo-localize.
- * @param {PseudoLocalizeStringOptions} options - Options for pseudo-localization.
- * @returns {string} The pseudo-localized string.
+ *
+ * @example
+ * pseudoLocalizeString('orange'); // 'ǿǿřȧȧƞɠḗḗ'
+ * pseudoLocalizeString('orange', {strategy: 'bidi'}); // 'ǝƃuɐɹo'
  */
 export const pseudoLocalizeString = (
-  string,
-  { strategy = 'accented' } = {}
+  string: string,
+  { strategy = 'accented' }: PseudoLocalizeStringOptions = {}
 ) => {
-  let opts = strategies[strategy];
+  const opts = strategies[strategy];
 
   let pseudoLocalizedText = '';
-  for (let character of string) {
+  for (const character of string) {
     if (character in opts.map) {
-      const char = /** @type {keyof typeof opts.map} */ (character);
+      const char = character as keyof typeof opts.map;
       const cl = char.toLowerCase();
       // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
       if (

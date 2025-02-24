@@ -1,37 +1,38 @@
 {
   "name": "pseudo-localization",
-  "version": "3.0.4",
+  "version": "3.1.5",
   "description": "pseudo-localization for internationalization testing",
   "files": [
-    "bin",
-    "src/localize.mjs",
-    "src/dom.mjs"
+    "dist",
+    "src"
   ],
-  "main": "./src/localize.mjs",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "import": "./src/localize.mjs"
+      "types": "./dist/localize.d.ts",
+      "import": "./dist/localize.js"
     },
     "./dom": {
-      "import": "./src/dom.mjs"
+      "types": "./dist/dom.d.ts",
+      "import": "./dist/dom.js"
     }
   },
   "bin": {
-    "pseudo-localization": "./bin/pseudo-localize.mjs"
+    "pseudo-localization": "./dist/bin/pseudo-localize.js"
   },
   "engines": {
     "node": "^23"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "check-formatting": "prettier --list-different src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
+    "lint": "eslint src/**/*.ts",
     "start": "node devserver.mjs",
-    "check-formatting": "prettier --list-different src/**/*.mjs",
-    "format": "prettier --write src/**/*.mjs",
-    "lint": "eslint src/**/*.mjs",
-    "test-js": "node ./src/localize.test.mjs",
-    "test": "npm run test-js jest && npm run check-formatting && npm run check-types && npm run lint",
-    "check-types": "tsc --noEmit",
-    "tsc": "tsc"
+    "test-js": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test './src/**/*.test.ts'",
+    "test": "npm run test-js && npm run check-formatting && npm run typecheck && npm run lint",
+    "typecheck": "tsc -p tsconfig.lib.json --noEmit"
   },
   "author": "Tryggvi Gylfason (http://twitter.com/tryggvigy)",
   "keywords": [
@@ -53,6 +54,7 @@
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@types/node": "^22.10.2",
+    "@types/yargs": "^17.0.33",
     "eslint": "^9.17.0",
     "globals": "^15.13.0",
     "prettier": "^3.4.2",

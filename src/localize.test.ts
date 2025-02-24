@@ -1,6 +1,6 @@
 import test from 'node:test';
 import { strict as assert } from 'node:assert';
-import { pseudoLocalizeString as localize } from './localize.mjs';
+import { pseudoLocalizeString as localize } from './localize.ts';
 
 test('accented', () => {
   assert.equal(localize('abcd'), 'ȧȧƀƈḓ');

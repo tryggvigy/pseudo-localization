@@ -37,7 +37,7 @@ Pseudo-localization helps detect issues such as:
 npm install pseudo-localization
 ```
 
-### Manual Installation
+### Copy The Source Code
 
 Copy the files from [`src`](https://github.com/tryggvigy/pseudo-localization/blob/master/src) and use them directly.
 
@@ -148,13 +148,7 @@ stop();
 A command-line interface (CLI) is available for quick testing and automation.
 
 ```sh
-npx pseudo-localization ./path/to/file.json
-
-# Pipe a string
-echo "hello world" | npx pseudo-localization
-
-# Direct input
-npx pseudo-localization -i "hello world"
+npx pseudo-localization "hello world"
 ```
 
 ### CLI Options
@@ -163,13 +157,11 @@ npx pseudo-localization -i "hello world"
 pseudo-localization [src] [options]
 
 Positionals:
-  src  Input file or STDIN
+  src  Input string
 
 Options:
-  -o, --output  Output file (defaults to STDOUT)
   --strategy    Localization strategy (accented or bidi)
   --help        Show help
-  --version     Show version
 ```
 
 ---

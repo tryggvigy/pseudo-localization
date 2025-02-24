@@ -1,20 +1,14 @@
 {
-  "include": ["src"],
   "compilerOptions": {
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "allowJs": true,
-    "checkJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "module": "preserve",
-    "noEmit": true,
-    "lib": ["es2022", "dom", "dom.iterable"]
-  }
+
+    // node type stripping settings
+    // https://nodejs.org/api/typescript.html#type-stripping
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": true,
+    "target": "esnext",
+    "module": "NodeNext"
+  },
+  "include": ["src/**/*.ts"]
 }
