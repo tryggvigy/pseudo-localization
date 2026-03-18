@@ -22,7 +22,7 @@
     "pseudo-localization": "./dist/bin/pseudo-localize.js"
   },
   "engines": {
-    "node": "^23"
+    "node": ">=23"
   },
   "scripts": {
     "build": "tsc -p tsconfig.lib.json",
